@@ -1,0 +1,2644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PEOPLE Vault</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root{
+    --bg:#050611;
+    --bg2:#080a1a;
+    --glass:rgba(255,255,255,.055);
+    --glass-strong:rgba(255,255,255,.09);
+    --border:rgba(255,255,255,.11);
+    --border-hover:rgba(151,125,255,.45);
+    --text:#f6f4ff;
+    --muted:#9695aa;
+    --purple:#9b7cff;
+    --purple2:#6d4aff;
+    --cyan:#5ce1e6;
+    --pink:#ff72c8;
+    --danger:#ff5d7a;
+    --shadow:0 25px 80px rgba(0,0,0,.45);
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 15% 10%, rgba(113,73,255,.18), transparent 28%),
+        radial-gradient(circle at 85% 15%, rgba(0,215,255,.10), transparent 25%),
+        radial-gradient(circle at 50% 100%, rgba(185,52,255,.12), transparent 32%),
+        linear-gradient(135deg,#03040c 0%,#070818 50%,#03040c 100%);
+    color:var(--text);
+    font-family:Inter,sans-serif;
+    overflow-x:hidden;
+}
+
+/* =========================
+   COSMIC BACKGROUND
+========================= */
+
+.space{
+    position:fixed;
+    inset:0;
+    z-index:-5;
+    overflow:hidden;
+    pointer-events:none;
+}
+
+.star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    background:white;
+    border-radius:50%;
+    opacity:.5;
+    animation:twinkle 3s infinite alternate;
+}
+
+@keyframes twinkle{
+    from{opacity:.15; transform:scale(.7)}
+    to{opacity:.8; transform:scale(1.3)}
+}
+
+.orb{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(90px);
+    opacity:.18;
+}
+
+.orb.one{
+    width:500px;
+    height:500px;
+    background:#6e43ff;
+    top:-220px;
+    left:-160px;
+}
+
+.orb.two{
+    width:450px;
+    height:450px;
+    background:#00d9ff;
+    right:-200px;
+    top:25%;
+}
+
+.orb.three{
+    width:500px;
+    height:500px;
+    background:#d833ff;
+    bottom:-300px;
+    left:30%;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+    width:min(1280px,calc(100% - 40px));
+    margin:20px auto 0;
+    height:72px;
+    padding:0 18px 0 24px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    border:1px solid var(--border);
+    background:rgba(9,10,25,.58);
+    backdrop-filter:blur(24px);
+    -webkit-backdrop-filter:blur(24px);
+    border-radius:24px;
+    box-shadow:0 12px 50px rgba(0,0,0,.28);
+
+    position:relative;
+    z-index:10;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.brand-symbol{
+    width:38px;
+    height:38px;
+    border-radius:12px;
+
+    display:grid;
+    place-items:center;
+
+    background:
+        linear-gradient(135deg,rgba(155,124,255,.3),rgba(92,225,230,.12));
+    border:1px solid rgba(155,124,255,.3);
+
+    box-shadow:
+        inset 0 0 25px rgba(155,124,255,.08),
+        0 0 25px rgba(155,124,255,.1);
+}
+
+.brand-symbol svg{
+    width:20px;
+}
+
+.brand-name{
+    font-family:"Space Grotesk";
+    font-size:18px;
+    font-weight:700;
+    letter-spacing:1.5px;
+}
+
+.brand-sub{
+    color:var(--muted);
+    font-size:10px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+}
+
+.nav-actions{
+    display:flex;
+    gap:10px;
+}
+
+.btn{
+    border:none;
+    cursor:pointer;
+    color:white;
+    font-family:Inter;
+    font-weight:600;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+
+    transition:.25s ease;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn-primary{
+    padding:12px 18px;
+    border-radius:14px;
+
+    background:
+        linear-gradient(135deg,#9676ff,#6b49ff);
+
+    box-shadow:
+        0 8px 30px rgba(111,73,255,.27),
+        inset 0 1px rgba(255,255,255,.25);
+}
+
+.btn-primary:hover{
+    box-shadow:
+        0 12px 40px rgba(111,73,255,.42),
+        inset 0 1px rgba(255,255,255,.3);
+}
+
+.btn-ghost{
+    padding:11px 15px;
+    border-radius:13px;
+    background:rgba(255,255,255,.045);
+    border:1px solid var(--border);
+}
+
+.btn-ghost:hover{
+    border-color:var(--border-hover);
+    background:rgba(155,124,255,.08);
+}
+
+.plus{
+    font-size:20px;
+    font-weight:400;
+    line-height:0;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.container{
+    width:min(1120px,calc(100% - 40px));
+    margin:auto;
+}
+
+.hero{
+    min-height:510px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    position:relative;
+}
+
+.eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 13px;
+    border-radius:999px;
+    background:rgba(155,124,255,.07);
+    border:1px solid rgba(155,124,255,.16);
+    color:#bcaeff;
+    font-size:11px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    margin-bottom:25px;
+}
+
+.eyebrow-dot{
+    width:6px;
+    height:6px;
+    background:#9c7dff;
+    border-radius:50%;
+    box-shadow:0 0 12px #9c7dff;
+}
+
+.hero h1{
+    font-family:"Space Grotesk";
+    font-size:clamp(58px,9vw,115px);
+    line-height:.88;
+    letter-spacing:-5px;
+    font-weight:700;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff 10%,
+            #c7bcff 42%,
+            #8e76ff 67%,
+            #68dce8 100%
+        );
+
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+
+    filter:drop-shadow(0 0 35px rgba(139,107,255,.12));
+}
+
+.hero p{
+    max-width:570px;
+    color:var(--muted);
+    margin-top:27px;
+    line-height:1.8;
+    font-size:15px;
+}
+
+.hero-actions{
+    margin-top:30px;
+    display:flex;
+    gap:12px;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin-bottom:80px;
+}
+
+.stat{
+    padding:22px;
+    border-radius:22px;
+    border:1px solid var(--border);
+    background:var(--glass);
+    backdrop-filter:blur(20px);
+    box-shadow:var(--shadow);
+}
+
+.stat-label{
+    font-size:11px;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+}
+
+.stat-value{
+    margin-top:7px;
+    font-family:"Space Grotesk";
+    font-size:28px;
+    font-weight:600;
+}
+
+/* =========================
+   PEOPLE SECTION
+========================= */
+
+.people-section{
+    padding-bottom:100px;
+}
+
+.section-head{
+    display:flex;
+    align-items:end;
+    justify-content:space-between;
+    margin-bottom:22px;
+}
+
+.section-title{
+    font-family:"Space Grotesk";
+    font-size:32px;
+    font-weight:600;
+    letter-spacing:-1px;
+}
+
+.section-title span{
+    color:var(--purple);
+}
+
+.section-desc{
+    margin-top:6px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.search-box{
+    width:240px;
+    position:relative;
+}
+
+.search-box input{
+    width:100%;
+    padding:12px 15px 12px 40px;
+    border-radius:14px;
+    border:1px solid var(--border);
+    outline:none;
+
+    color:white;
+    background:rgba(255,255,255,.04);
+    backdrop-filter:blur(15px);
+}
+
+.search-icon{
+    position:absolute;
+    left:14px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#88879a;
+}
+
+/* =========================
+   PEOPLE GRID
+========================= */
+
+.people-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+}
+
+.person-card{
+    position:relative;
+    min-height:260px;
+    padding:20px;
+    border-radius:25px;
+
+    border:1px solid var(--border);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.075),
+            rgba(255,255,255,.025)
+        );
+
+    backdrop-filter:blur(22px);
+    -webkit-backdrop-filter:blur(22px);
+
+    cursor:pointer;
+    overflow:hidden;
+
+    transition:
+        transform .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+}
+
+.person-card::before{
+    content:"";
+    position:absolute;
+    width:160px;
+    height:160px;
+    border-radius:50%;
+    background:var(--purple);
+    filter:blur(80px);
+    opacity:.08;
+    top:-80px;
+    right:-50px;
+    transition:.3s;
+}
+
+.person-card:hover{
+    transform:translateY(-6px);
+    border-color:rgba(155,124,255,.38);
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.38),
+        0 0 35px rgba(121,86,255,.08);
+}
+
+.person-card:hover::before{
+    opacity:.18;
+}
+
+.person-top{
+    display:flex;
+    gap:15px;
+    align-items:center;
+}
+
+.avatar{
+    width:64px;
+    height:64px;
+    border-radius:19px;
+    flex-shrink:0;
+
+    object-fit:cover;
+
+    background:
+        linear-gradient(135deg,#7f63ff,#4b3a9e);
+
+    border:1px solid rgba(255,255,255,.13);
+}
+
+.avatar-placeholder{
+    display:grid;
+    place-items:center;
+    font-family:"Space Grotesk";
+    font-size:22px;
+    font-weight:600;
+    color:white;
+}
+
+.person-name{
+    font-size:17px;
+    font-weight:700;
+}
+
+.person-meta{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:5px;
+    line-height:1.5;
+}
+
+.person-divider{
+    height:1px;
+    background:rgba(255,255,255,.07);
+    margin:18px 0;
+}
+
+.person-info{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.info-label{
+    color:#77768a;
+    font-size:9px;
+    text-transform:uppercase;
+    letter-spacing:1.3px;
+}
+
+.info-value{
+    font-size:12px;
+    margin-top:4px;
+    color:#dddbe9;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.card-arrow{
+    position:absolute;
+    right:18px;
+    bottom:18px;
+    color:#85829a;
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.empty{
+    min-height:300px;
+    border:1px dashed rgba(255,255,255,.12);
+    border-radius:26px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    background:rgba(255,255,255,.02);
+}
+
+.empty-icon{
+    width:60px;
+    height:60px;
+    border-radius:20px;
+    display:grid;
+    place-items:center;
+    background:rgba(155,124,255,.08);
+    border:1px solid rgba(155,124,255,.16);
+    margin-bottom:18px;
+}
+
+.empty h3{
+    font-size:18px;
+}
+
+.empty p{
+    color:var(--muted);
+    font-size:13px;
+    margin:7px 0 18px;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(1,2,8,.72);
+    backdrop-filter:blur(18px);
+    z-index:100;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal-overlay.active{
+    display:flex;
+}
+
+.modal{
+    width:min(650px,100%);
+    max-height:92vh;
+    overflow-y:auto;
+
+    border:1px solid rgba(255,255,255,.13);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(18,18,38,.88),
+            rgba(8,9,22,.92)
+        );
+
+    backdrop-filter:blur(35px);
+    border-radius:30px;
+
+    box-shadow:
+        0 40px 120px rgba(0,0,0,.65),
+        0 0 80px rgba(105,75,255,.09);
+
+    animation:modalIn .3s ease;
+}
+
+@keyframes modalIn{
+    from{
+        opacity:0;
+        transform:translateY(20px) scale(.97);
+    }
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+.modal-header{
+    padding:24px 25px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.modal-title{
+    font-family:"Space Grotesk";
+    font-size:21px;
+    font-weight:600;
+}
+
+.modal-subtitle{
+    color:var(--muted);
+    font-size:11px;
+    margin-top:4px;
+}
+
+.close{
+    width:38px;
+    height:38px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.04);
+    color:#aaa8b9;
+    cursor:pointer;
+    font-size:19px;
+}
+
+.form{
+    padding:25px;
+}
+
+.avatar-upload{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-bottom:23px;
+}
+
+.upload-preview{
+    width:82px;
+    height:82px;
+    border-radius:23px;
+    object-fit:cover;
+    border:1px solid rgba(255,255,255,.13);
+    background:linear-gradient(135deg,#7054df,#32255f);
+}
+
+.upload-preview.placeholder{
+    display:grid;
+    place-items:center;
+    font-size:27px;
+}
+
+.upload-controls{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.upload-label{
+    font-size:13px;
+    font-weight:600;
+}
+
+.upload-hint{
+    font-size:10px;
+    color:var(--muted);
+}
+
+.file-label{
+    display:inline-flex;
+    width:max-content;
+    padding:8px 11px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.045);
+    font-size:11px;
+    cursor:pointer;
+    margin-top:2px;
+}
+
+.file-label:hover{
+    border-color:var(--border-hover);
+}
+
+#imageInput{
+    display:none;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+}
+
+.field{
+    margin-bottom:14px;
+}
+
+.field.full{
+    grid-column:1/-1;
+}
+
+.field label{
+    display:block;
+    color:#aaa8b8;
+    font-size:10px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    margin:0 0 7px 3px;
+}
+
+.field input,
+.field textarea,
+.field select{
+    width:100%;
+    border:1px solid rgba(255,255,255,.10);
+    background:rgba(255,255,255,.045);
+    color:white;
+    outline:none;
+    border-radius:13px;
+    padding:12px 13px;
+    font-family:Inter;
+    font-size:12px;
+    transition:.2s;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+    border-color:rgba(155,124,255,.5);
+    box-shadow:0 0 0 3px rgba(155,124,255,.06);
+}
+
+.field textarea{
+    resize:vertical;
+    min-height:80px;
+    line-height:1.55;
+}
+
+.field select option{
+    background:#111225;
+}
+
+.form-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:9px;
+    padding-top:5px;
+}
+
+.btn-danger{
+    color:#ff8ca0;
+    border-color:rgba(255,93,122,.18);
+}
+
+/* =========================
+   PROFILE MODAL
+========================= */
+
+.profile-modal{
+    width:min(700px,100%);
+}
+
+.profile-hero{
+    position:relative;
+    min-height:200px;
+    padding:30px;
+    display:flex;
+    align-items:end;
+    gap:20px;
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(137,101,255,.25),
+            transparent 45%
+        ),
+        radial-gradient(
+            circle at 90% 80%,
+            rgba(92,225,230,.12),
+            transparent 40%
+        );
+}
+
+.profile-hero::after{
+    content:"";
+    position:absolute;
+    inset:auto 0 0;
+    height:80px;
+    background:linear-gradient(transparent,rgba(8,9,22,.85));
+}
+
+.profile-avatar{
+    width:100px;
+    height:100px;
+    border-radius:28px;
+    object-fit:cover;
+    border:1px solid rgba(255,255,255,.18);
+    position:relative;
+    z-index:2;
+    box-shadow:0 15px 45px rgba(0,0,0,.4);
+}
+
+.profile-title{
+    position:relative;
+    z-index:2;
+}
+
+.profile-title h2{
+    font-family:"Space Grotesk";
+    font-size:28px;
+}
+
+.profile-title p{
+    color:#aaa8b8;
+    font-size:12px;
+    margin-top:5px;
+}
+
+.profile-body{
+    padding:25px;
+}
+
+.profile-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.detail-box{
+    padding:16px;
+    border-radius:17px;
+    border:1px solid rgba(255,255,255,.07);
+    background:rgba(255,255,255,.025);
+}
+
+.detail-box.full{
+    grid-column:1/-1;
+}
+
+.detail-box .label{
+    font-size:9px;
+    color:#79778b;
+    text-transform:uppercase;
+    letter-spacing:1.3px;
+}
+
+.detail-box .value{
+    font-size:13px;
+    color:#e3e0ee;
+    margin-top:7px;
+    line-height:1.55;
+    white-space:pre-wrap;
+}
+
+.profile-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:9px;
+    margin-top:18px;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+    position:fixed;
+    right:22px;
+    bottom:22px;
+    z-index:300;
+
+    padding:13px 17px;
+    border-radius:14px;
+
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(17,17,35,.88);
+    backdrop-filter:blur(20px);
+
+    color:#e9e6f3;
+    font-size:12px;
+
+    box-shadow:0 20px 60px rgba(0,0,0,.4);
+
+    transform:translateY(20px);
+    opacity:0;
+    pointer-events:none;
+    transition:.3s;
+}
+
+.toast.show{
+    opacity:1;
+    transform:none;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    text-align:center;
+    padding:35px 20px 50px;
+    color:#575568;
+    font-size:10px;
+    letter-spacing:1px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:850px){
+    .people-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .section-head{
+        align-items:start;
+        gap:15px;
+        flex-direction:column;
+    }
+
+    .search-box{
+        width:100%;
+    }
+}
+
+@media(max-width:600px){
+    .navbar{
+        width:calc(100% - 24px);
+        margin-top:12px;
+        height:64px;
+        padding-left:15px;
+    }
+
+    .brand-sub{
+        display:none;
+    }
+
+    .nav-actions .btn-ghost{
+        display:none;
+    }
+
+    .container{
+        width:calc(100% - 24px);
+    }
+
+    .hero{
+        min-height:430px;
+    }
+
+    .hero h1{
+        font-size:68px;
+        letter-spacing:-4px;
+    }
+
+    .hero p{
+        font-size:13px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+        margin-bottom:60px;
+    }
+
+    .people-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-grid,
+    .profile-grid{
+        grid-template-columns:1fr;
+    }
+
+    .field.full,
+    .detail-box.full{
+        grid-column:auto;
+    }
+
+    .profile-hero{
+        padding:24px;
+    }
+
+    .profile-avatar{
+        width:82px;
+        height:82px;
+    }
+
+    .profile-title h2{
+        font-size:22px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- COSMIC BACKGROUND -->
+<div class="space" id="space">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+    <div class="orb three"></div>
+</div>
+
+
+<!-- NAVBAR -->
+<nav class="navbar">
+
+    <div class="brand">
+
+        <div class="brand-symbol">
+            <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="9" cy="8" r="3.2" stroke="#c7baff" stroke-width="1.5"/>
+                <path d="M3.5 19c.8-3.1 2.6-4.8 5.5-4.8s4.7 1.7 5.5 4.8"
+                      stroke="#c7baff"
+                      stroke-width="1.5"
+                      stroke-linecap="round"/>
+                <path d="M15 5.5c1.9.3 3.1 1.5 3.1 3.2 0 1.4-.8 2.5-2 3"
+                      stroke="#70e2e7"
+                      stroke-width="1.4"
+                      stroke-linecap="round"/>
+                <path d="M16.2 14.7c2.2.5 3.6 1.9 4.3 4.3"
+                      stroke="#70e2e7"
+                      stroke-width="1.4"
+                      stroke-linecap="round"/>
+            </svg>
+        </div>
+
+        <div>
+            <div class="brand-name">PEOPLE</div>
+            <div class="brand-sub">Personal Relationship Vault</div>
+        </div>
+
+    </div>
+
+    <div class="nav-actions">
+
+        <button class="btn btn-ghost" onclick="scrollToPeople()">
+            View People
+        </button>
+
+        <button class="btn btn-primary" onclick="openAddModal()">
+            <span class="plus">+</span>
+            Add Person
+        </button>
+
+    </div>
+
+</nav>
+
+
+<!-- HERO -->
+<main class="container">
+
+<section class="hero">
+
+    <div class="eyebrow">
+        <span class="eyebrow-dot"></span>
+        Your people. Your memory.
+    </div>
+
+    <h1>PEOPLE</h1>
+
+    <p>
+        A private space to remember the people you meet,
+        the moments you share, and the details that matter.
+    </p>
+
+    <div class="hero-actions">
+
+        <button class="btn btn-primary" onclick="openAddModal()">
+            <span class="plus">+</span>
+            Add Someone
+        </button>
+
+        <button class="btn btn-ghost" onclick="scrollToPeople()">
+            Explore People
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- STATS -->
+<section class="stats">
+
+    <div class="stat">
+        <div class="stat-label">People Saved</div>
+        <div class="stat-value" id="peopleCount">0</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-label">Profiles Complete</div>
+        <div class="stat-value" id="completeCount">0%</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-label">Last Added</div>
+        <div class="stat-value" id="lastAdded">—</div>
+    </div>
+
+</section>
+
+
+<!-- PEOPLE -->
+<section class="people-section" id="peopleSection">
+
+    <div class="section-head">
+
+        <div>
+            <div class="section-title">
+                Your <span>People</span>
+            </div>
+
+            <div class="section-desc">
+                Everyone you've chosen to remember.
+            </div>
+        </div>
+
+        <div class="search-box">
+
+            <span class="search-icon">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+                    <circle cx="11" cy="11" r="6.5"
+                            stroke="currentColor"
+                            stroke-width="1.7"/>
+                    <path d="m16 16 5 5"
+                          stroke="currentColor"
+                          stroke-width="1.7"
+                          stroke-linecap="round"/>
+                </svg>
+            </span>
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search people..."
+                oninput="renderPeople()"
+            >
+
+        </div>
+
+    </div>
+
+
+    <div id="peopleContainer"></div>
+
+</section>
+
+</main>
+
+
+<footer>
+    PEOPLE · Your personal memory space
+</footer>
+
+
+<!-- =========================
+     ADD / EDIT MODAL
+========================= -->
+
+<div class="modal-overlay" id="formModal">
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+                <div class="modal-title" id="formTitle">
+                    Add Person
+                </div>
+
+                <div class="modal-subtitle">
+                    Save the details that matter.
+                </div>
+            </div>
+
+            <button class="close" onclick="closeFormModal()">×</button>
+
+        </div>
+
+
+        <form class="form" id="personForm" onsubmit="savePerson(event)">
+
+            <input type="hidden" id="editingId">
+
+
+            <!-- PHOTO -->
+            <div class="avatar-upload">
+
+                <div
+                    class="upload-preview placeholder"
+                    id="uploadPreview"
+                >
+                    +
+                </div>
+
+                <div class="upload-controls">
+
+                    <div class="upload-label">
+                        Profile Picture
+                    </div>
+
+                    <div class="upload-hint">
+                        JPG / PNG · Recommended square image
+                    </div>
+
+                    <label class="file-label">
+                        Choose Picture
+                        <input
+                            type="file"
+                            id="imageInput"
+                            accept="image/*"
+                            onchange="previewImage(event)"
+                        >
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- BASIC DETAILS -->
+            <div class="form-grid">
+
+                <div class="field">
+
+                    <label>Name *</label>
+
+                    <input
+                        id="name"
+                        required
+                        maxlength="80"
+                        placeholder="e.g. Aryan Sharma"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>College</label>
+
+                    <input
+                        id="college"
+                        maxlength="100"
+                        placeholder="e.g. MBM University"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>Year</label>
+
+                    <select id="year">
+
+                        <option value="">Select year</option>
+                        <option>1st Year</option>
+                        <option>2nd Year</option>
+                        <option>3rd Year</option>
+                        <option>4th Year</option>
+                        <option>5th Year</option>
+                        <option>Graduate</option>
+                        <option>Postgraduate</option>
+                        <option>Other</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>Branch</label>
+
+                    <input
+                        id="branch"
+                        maxlength="80"
+                        placeholder="e.g. CSE"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>First Meet</label>
+
+                    <input
+                        id="firstMeet"
+                        type="date"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>Last Meet</label>
+
+                    <input
+                        id="lastMeet"
+                        type="date"
+                    >
+
+                </div>
+
+
+                <div class="field full">
+
+                    <label>Attachment Reason</label>
+
+                    <textarea
+                        id="attachmentReason"
+                        maxlength="1000"
+                        placeholder="Why did you become attached to this person?"
+                    ></textarea>
+
+                </div>
+
+
+                <div class="field full">
+
+                    <label>Detachment Reason</label>
+
+                    <textarea
+                        id="detachmentReason"
+                        maxlength="1000"
+                        placeholder="Why did you distance yourself, if applicable?"
+                    ></textarea>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>Strong In</label>
+
+                    <textarea
+                        id="strongIn"
+                        maxlength="700"
+                        placeholder="What are they good at?"
+                    ></textarea>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>Weakness</label>
+
+                    <textarea
+                        id="weakness"
+                        maxlength="700"
+                        placeholder="What are their weaknesses?"
+                    ></textarea>
+
+                </div>
+
+
+                <div class="field full">
+
+                    <label>Notes</label>
+
+                    <textarea
+                        id="notes"
+                        maxlength="1500"
+                        placeholder="Anything else worth remembering..."
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                    type="button"
+                    class="btn btn-ghost"
+                    onclick="closeFormModal()"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Save Person
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     PROFILE MODAL
+========================= -->
+
+<div class="modal-overlay" id="profileModal">
+
+    <div class="modal profile-modal" id="profileContent">
+
+        <!-- generated dynamically -->
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* ==========================================
+   DATABASE
+========================================== */
+
+const STORAGE_KEY = "people_vault_v1";
+
+let people = JSON.parse(
+    localStorage.getItem(STORAGE_KEY) || "[]"
+);
+
+let currentImage = "";
+let currentProfileId = null;
+
+
+/* ==========================================
+   COSMIC STARS
+========================================== */
+
+function createStars(){
+
+    const space = document.getElementById("space");
+
+    for(let i = 0; i < 100; i++){
+
+        const star = document.createElement("div");
+
+        star.className = "star";
+
+        star.style.left = Math.random() * 100 + "%";
+        star.style.top = Math.random() * 100 + "%";
+
+        const size = Math.random() * 2 + 1;
+
+        star.style.width = size + "px";
+        star.style.height = size + "px";
+
+        star.style.animationDelay =
+            Math.random() * 4 + "s";
+
+        space.appendChild(star);
+    }
+}
+
+createStars();
+
+
+/* ==========================================
+   STORAGE
+========================================== */
+
+function saveDatabase(){
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(people)
+    );
+
+}
+
+
+/* ==========================================
+   UTILITIES
+========================================== */
+
+function escapeHTML(value){
+
+    if(value === null || value === undefined){
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+function formatDate(date){
+
+    if(!date){
+        return "—";
+    }
+
+    const d = new Date(date + "T00:00:00");
+
+    if(isNaN(d)){
+        return date;
+    }
+
+    return d.toLocaleDateString(
+        "en-IN",
+        {
+            day:"numeric",
+            month:"short",
+            year:"numeric"
+        }
+    );
+
+}
+
+
+function initials(name){
+
+    if(!name){
+        return "?";
+    }
+
+    return name
+        .trim()
+        .split(/\s+/)
+        .slice(0,2)
+        .map(x => x[0])
+        .join("")
+        .toUpperCase();
+
+}
+
+
+function showToast(message){
+
+    const toast = document.getElementById("toast");
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+    },2500);
+
+}
+
+
+/* ==========================================
+   SCROLL
+========================================== */
+
+function scrollToPeople(){
+
+    document
+        .getElementById("peopleSection")
+        .scrollIntoView({
+            behavior:"smooth"
+        });
+
+}
+
+
+/* ==========================================
+   MODAL
+========================================== */
+
+function openAddModal(){
+
+    document.getElementById("formModal")
+        .classList.add("active");
+
+    document.getElementById("formTitle")
+        .textContent = "Add Person";
+
+    document.getElementById("personForm")
+        .reset();
+
+    document.getElementById("editingId")
+        .value = "";
+
+    currentImage = "";
+
+    setPreview("");
+
+}
+
+
+function closeFormModal(){
+
+    document.getElementById("formModal")
+        .classList.remove("active");
+
+}
+
+
+function closeProfileModal(){
+
+    document.getElementById("profileModal")
+        .classList.remove("active");
+
+    currentProfileId = null;
+
+}
+
+
+/* ==========================================
+   IMAGE
+========================================== */
+
+function previewImage(event){
+
+    const file = event.target.files[0];
+
+    if(!file){
+        return;
+    }
+
+    if(file.size > 5 * 1024 * 1024){
+
+        showToast("Image should be below 5 MB.");
+
+        event.target.value = "";
+
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+
+        currentImage = e.target.result;
+
+        setPreview(currentImage);
+
+    };
+
+    reader.readAsDataURL(file);
+
+}
+
+
+function setPreview(src){
+
+    const preview =
+        document.getElementById("uploadPreview");
+
+    if(src){
+
+        preview.classList.remove("placeholder");
+
+        preview.innerHTML = "";
+
+        const img = document.createElement("img");
+
+        img.src = src;
+
+        img.style.width = "100%";
+        img.style.height = "100%";
+        img.style.objectFit = "cover";
+        img.style.borderRadius = "inherit";
+
+        preview.appendChild(img);
+
+    }else{
+
+        preview.classList.add("placeholder");
+
+        preview.innerHTML = "+";
+
+    }
+
+}
+
+
+/* ==========================================
+   SAVE PERSON
+========================================== */
+
+function savePerson(event){
+
+    event.preventDefault();
+
+    const editingId =
+        document.getElementById("editingId").value;
+
+    const name =
+        document.getElementById("name").value.trim();
+
+    if(!name){
+        return;
+    }
+
+
+    /* DUPLICATE CHECK */
+
+    const duplicate = people.find(person => {
+
+        if(editingId && person.id === editingId){
+            return false;
+        }
+
+        return person.name
+            .trim()
+            .toLowerCase() === name.toLowerCase();
+
+    });
+
+
+    if(duplicate){
+
+        showToast(
+            `"${name}" is already saved.`
+        );
+
+        document
+            .getElementById("name")
+            .focus();
+
+        return;
+    }
+
+
+    const data = {
+
+        name,
+
+        college:
+            document.getElementById("college").value.trim(),
+
+        year:
+            document.getElementById("year").value,
+
+        branch:
+            document.getElementById("branch").value.trim(),
+
+        firstMeet:
+            document.getElementById("firstMeet").value,
+
+        lastMeet:
+            document.getElementById("lastMeet").value,
+
+        attachmentReason:
+            document
+                .getElementById("attachmentReason")
+                .value.trim(),
+
+        detachmentReason:
+            document
+                .getElementById("detachmentReason")
+                .value.trim(),
+
+        strongIn:
+            document
+                .getElementById("strongIn")
+                .value.trim(),
+
+        weakness:
+            document
+                .getElementById("weakness")
+                .value.trim(),
+
+        notes:
+            document
+                .getElementById("notes")
+                .value.trim(),
+
+        image: currentImage || "",
+
+    };
+
+
+    if(editingId){
+
+        const index =
+            people.findIndex(
+                p => p.id === editingId
+            );
+
+        if(index !== -1){
+
+            people[index] = {
+                ...people[index],
+                ...data,
+                updatedAt:Date.now()
+            };
+
+            showToast("Profile updated.");
+
+        }
+
+    }else{
+
+        people.push({
+
+            id:
+                crypto.randomUUID
+                ? crypto.randomUUID()
+                : Date.now().toString(),
+
+            ...data,
+
+            createdAt:Date.now(),
+            updatedAt:Date.now()
+
+        });
+
+        showToast("Person saved.");
+
+    }
+
+
+    saveDatabase();
+
+    closeFormModal();
+
+    renderPeople();
+
+    updateStats();
+
+}
+
+
+/* ==========================================
+   EDIT
+========================================== */
+
+function editPerson(id){
+
+    const person =
+        people.find(p => p.id === id);
+
+    if(!person){
+        return;
+    }
+
+    closeProfileModal();
+
+    document.getElementById("formModal")
+        .classList.add("active");
+
+    document.getElementById("formTitle")
+        .textContent = "Edit Person";
+
+    document.getElementById("editingId")
+        .value = person.id;
+
+    document.getElementById("name")
+        .value = person.name || "";
+
+    document.getElementById("college")
+        .value = person.college || "";
+
+    document.getElementById("year")
+        .value = person.year || "";
+
+    document.getElementById("branch")
+        .value = person.branch || "";
+
+    document.getElementById("firstMeet")
+        .value = person.firstMeet || "";
+
+    document.getElementById("lastMeet")
+        .value = person.lastMeet || "";
+
+    document.getElementById("attachmentReason")
+        .value = person.attachmentReason || "";
+
+    document.getElementById("detachmentReason")
+        .value = person.detachmentReason || "";
+
+    document.getElementById("strongIn")
+        .value = person.strongIn || "";
+
+    document.getElementById("weakness")
+        .value = person.weakness || "";
+
+    document.getElementById("notes")
+        .value = person.notes || "";
+
+    currentImage = person.image || "";
+
+    setPreview(currentImage);
+
+}
+
+
+/* ==========================================
+   DELETE
+========================================== */
+
+function deletePerson(id){
+
+    const person =
+        people.find(p => p.id === id);
+
+    if(!person){
+        return;
+    }
+
+    const confirmed =
+        confirm(
+            `Delete "${person.name}"?\n\nThis cannot be undone.`
+        );
+
+    if(!confirmed){
+        return;
+    }
+
+    people =
+        people.filter(
+            p => p.id !== id
+        );
+
+    saveDatabase();
+
+    closeProfileModal();
+
+    renderPeople();
+
+    updateStats();
+
+    showToast("Profile deleted.");
+
+}
+
+
+/* ==========================================
+   OPEN PROFILE
+========================================== */
+
+function openProfile(id){
+
+    const person =
+        people.find(p => p.id === id);
+
+    if(!person){
+        return;
+    }
+
+    currentProfileId = id;
+
+    const image = person.image
+        ? `<img class="profile-avatar" src="${person.image}" alt="">`
+        : `
+            <div class="profile-avatar avatar-placeholder">
+                ${escapeHTML(initials(person.name))}
+            </div>
+        `;
+
+
+    document.getElementById("profileContent").innerHTML = `
+
+        <div class="profile-hero">
+
+            ${image}
+
+            <div class="profile-title">
+
+                <h2>
+                    ${escapeHTML(person.name)}
+                </h2>
+
+                <p>
+                    ${escapeHTML(person.college || "College not added")}
+                    ${person.year ? " · " + escapeHTML(person.year) : ""}
+                    ${person.branch ? " · " + escapeHTML(person.branch) : ""}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="profile-body">
+
+            <div class="profile-grid">
+
+                <div class="detail-box">
+
+                    <div class="label">
+                        College
+                    </div>
+
+                    <div class="value">
+                        ${escapeHTML(person.college || "—")}
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <div class="label">
+                        Branch
+                    </div>
+
+                    <div class="value">
+                        ${escapeHTML(person.branch || "—")}
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <div class="label">
+                        Year
+                    </div>
+
+                    <div class="value">
+                        ${escapeHTML(person.year || "—")}
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <div class="label">
+                        First Meet
+                    </div>
+
+                    <div class="value">
+                        ${formatDate(person.firstMeet)}
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <div class="label">
+                        Last Meet
+                    </div>
+
+                    <div class="value">
+                        ${formatDate(person.lastMeet)}
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <div class="label">
+                        Profile Added
+                    </div>
+
+                    <div class="value">
+                        ${person.createdAt
+                            ? new Date(person.createdAt)
+                                .toLocaleDateString(
+                                    "en-IN",
+                                    {
+                                        day:"numeric",
+                                        month:"short",
+                                        year:"numeric"
+                                    }
+                                )
+                            : "—"
+                        }
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box full">
+
+                    <div class="label">
+                        Attachment Reason
+                    </div>
+
+                    <div class="value">
+                        ${escapeHTML(
+                            person.attachmentReason || "—"
+                        )}
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box full">
+
+                    <div class="label">
+                        Detachment Reason
+                    </div>
+
+                    <div class="value">
+                        ${escapeHTML(
+                            person.detachmentReason || "—"
+                        )}
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <div class="label">
+                        Strong In
+                    </div>
+
+                    <div class="value">
+                        ${escapeHTML(
+                            person.strongIn || "—"
+                        )}
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <div class="label">
+                        Weakness
+                    </div>
+
+                    <div class="value">
+                        ${escapeHTML(
+                            person.weakness || "—"
+                        )}
+                    </div>
+
+                </div>
+
+
+                <div class="detail-box full">
+
+                    <div class="label">
+                        Notes
+                    </div>
+
+                    <div class="value">
+                        ${escapeHTML(
+                            person.notes || "—"
+                        )}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="profile-actions">
+
+                <button
+                    class="btn btn-ghost btn-danger"
+                    onclick="deletePerson('${person.id}')"
+                >
+                    Delete
+                </button>
+
+                <button
+                    class="btn btn-ghost"
+                    onclick="editPerson('${person.id}')"
+                >
+                    Edit
+                </button>
+
+                <button
+                    class="btn btn-primary"
+                    onclick="closeProfileModal()"
+                >
+                    Done
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document.getElementById("profileModal")
+        .classList.add("active");
+
+}
+
+
+/* ==========================================
+   RENDER PEOPLE
+========================================== */
+
+function renderPeople(){
+
+    const container =
+        document.getElementById("peopleContainer");
+
+    const search =
+        document.getElementById("searchInput")
+            .value
+            .trim()
+            .toLowerCase();
+
+
+    const filtered =
+        people.filter(person => {
+
+            const text = [
+
+                person.name,
+                person.college,
+                person.year,
+                person.branch,
+                person.strongIn
+
+            ]
+            .join(" ")
+            .toLowerCase();
+
+            return text.includes(search);
+
+        });
+
+
+    if(filtered.length === 0){
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+
+                    <svg width="25" height="25"
+                         viewBox="0 0 24 24"
+                         fill="none">
+
+                        <circle
+                            cx="9"
+                            cy="8"
+                            r="3"
+                            stroke="#a18aff"
+                            stroke-width="1.5"
+                        />
+
+                        <path
+                            d="M3.5 19c.7-3.2 2.5-5 5.5-5s4.8 1.8 5.5 5"
+                            stroke="#a18aff"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                        />
+
+                    </svg>
+
+                </div>
+
+                <h3>
+                    ${search
+                        ? "No people found"
+                        : "Your people space is empty"
+                    }
+                </h3>
+
+                <p>
+                    ${search
+                        ? "Try another name or keyword."
+                        : "Start by adding someone you want to remember."
+                    }
+                </p>
+
+                ${
+                    search
+                    ? ""
+                    : `
+                        <button
+                            class="btn btn-primary"
+                            onclick="openAddModal()"
+                        >
+                            <span class="plus">+</span>
+                            Add First Person
+                        </button>
+                    `
+                }
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML = `
+
+        <div class="people-grid">
+
+            ${filtered
+                .sort(
+                    (a,b) =>
+                        (b.updatedAt || 0) -
+                        (a.updatedAt || 0)
+                )
+                .map(person => {
+
+                    const avatar =
+                        person.image
+                        ? `
+                            <img
+                                class="avatar"
+                                src="${person.image}"
+                                alt=""
+                            >
+                          `
+                        : `
+                            <div class="avatar avatar-placeholder">
+                                ${escapeHTML(
+                                    initials(person.name)
+                                )}
+                            </div>
+                          `;
+
+
+                    const meta = [
+
+                        person.college,
+                        person.year,
+                        person.branch
+
+                    ]
+                    .filter(Boolean)
+                    .map(escapeHTML)
+                    .join(" · ") || "No academic details";
+
+
+                    return `
+
+                        <div
+                            class="person-card"
+                            onclick="openProfile('${person.id}')"
+                        >
+
+                            <div class="person-top">
+
+                                ${avatar}
+
+                                <div>
+
+                                    <div class="person-name">
+                                        ${escapeHTML(person.name)}
+                                    </div>
+
+                                    <div class="person-meta">
+                                        ${meta}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="person-divider"></div>
+
+
+                            <div class="person-info">
+
+                                <div>
+
+                                    <div class="info-label">
+                                        First Meet
+                                    </div>
+
+                                    <div class="info-value">
+                                        ${formatDate(person.firstMeet)}
+                                    </div>
+
+                                </div>
+
+
+                                <div>
+
+                                    <div class="info-label">
+                                        Last Meet
+                                    </div>
+
+                                    <div class="info-value">
+                                        ${formatDate(person.lastMeet)}
+                                    </div>
+
+                                </div>
+
+
+                                <div>
+
+                                    <div class="info-label">
+                                        Strong In
+                                    </div>
+
+                                    <div class="info-value">
+                                        ${escapeHTML(
+                                            person.strongIn || "Not added"
+                                        )}
+                                    </div>
+
+                                </div>
+
+
+                                <div>
+
+                                    <div class="info-label">
+                                        Weakness
+                                    </div>
+
+                                    <div class="info-value">
+                                        ${escapeHTML(
+                                            person.weakness || "Not added"
+                                        )}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="card-arrow">
+
+                                <svg width="18" height="18"
+                                     viewBox="0 0 24 24"
+                                     fill="none">
+
+                                    <path
+                                        d="M9 18l6-6-6-6"
+                                        stroke="currentColor"
+                                        stroke-width="1.6"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+
+                                </svg>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                })
+                .join("")
+            }
+
+        </div>
+
+    `;
+
+}
+
+
+/* ==========================================
+   STATS
+========================================== */
+
+function updateStats(){
+
+    const count = people.length;
+
+    document.getElementById("peopleCount")
+        .textContent = count;
+
+
+    if(count === 0){
+
+        document.getElementById("completeCount")
+            .textContent = "0%";
+
+        document.getElementById("lastAdded")
+            .textContent = "—";
+
+        return;
+    }
+
+
+    const fields = [
+        "name",
+        "college",
+        "year",
+        "branch",
+        "firstMeet",
+        "lastMeet",
+        "attachmentReason",
+        "detachmentReason",
+        "strongIn",
+        "weakness",
+        "notes"
+    ];
+
+
+    let total = 0;
+
+    let completed = 0;
+
+
+    people.forEach(person => {
+
+        fields.forEach(field => {
+
+            total++;
+
+            if(
+                person[field] &&
+                String(person[field]).trim()
+            ){
+                completed++;
+            }
+
+        });
+
+    });
+
+
+    const percentage =
+        Math.round(
+            completed / total * 100
+        );
+
+
+    document.getElementById("completeCount")
+        .textContent = percentage + "%";
+
+
+    const latest =
+        [...people]
+            .sort(
+                (a,b) =>
+                    (b.createdAt || 0) -
+                    (a.createdAt || 0)
+            )[0];
+
+
+    document.getElementById("lastAdded")
+        .textContent =
+            latest
+            ? latest.name.split(" ")[0]
+            : "—";
+
+}
+
+
+/* ==========================================
+   CLICK OUTSIDE MODALS
+========================================== */
+
+document
+    .getElementById("formModal")
+    .addEventListener("click",function(e){
+
+        if(e.target === this){
+            closeFormModal();
+        }
+
+    });
+
+
+document
+    .getElementById("profileModal")
+    .addEventListener("click",function(e){
+
+        if(e.target === this){
+            closeProfileModal();
+        }
+
+    });
+
+
+/* ==========================================
+   ESCAPE KEY
+========================================== */
+
+document.addEventListener("keydown",function(e){
+
+    if(e.key === "Escape"){
+
+        closeFormModal();
+        closeProfileModal();
+
+    }
+
+});
+
+
+/* ==========================================
+   INITIALIZE
+========================================== */
+
+renderPeople();
+updateStats();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MAIN — Personal Command Center</title>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+
+/* =========================================================
+   ROOT
+========================================================= */
+
+:root {
+
+    --bg: #04050a;
+    --bg2: #080a12;
+
+    --glass: rgba(17, 20, 32, .58);
+    --glass-strong: rgba(19, 22, 36, .78);
+
+    --border: rgba(255,255,255,.085);
+    --border-hover: rgba(155,124,255,.35);
+
+    --text: #f5f6fa;
+    --muted: #969baa;
+    --dim: #5e6474;
+
+    --purple: #9b7cff;
+    --purple2: #7354ff;
+
+    --cyan: #61ddff;
+    --green: #5be6a8;
+    --orange: #ffbd72;
+    --pink: #ff76b7;
+
+    --shadow:
+        0 30px 100px rgba(0,0,0,.48);
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+
+    min-height: 100vh;
+
+    color: var(--text);
+
+    font-family: Inter, sans-serif;
+
+    overflow-x: hidden;
+
+    background:
+
+        radial-gradient(
+            circle at 10% 5%,
+            rgba(122,82,255,.16),
+            transparent 27%
+        ),
+
+        radial-gradient(
+            circle at 90% 15%,
+            rgba(54,202,255,.09),
+            transparent 25%
+        ),
+
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(169,64,255,.08),
+            transparent 30%
+        ),
+
+        linear-gradient(
+            145deg,
+            #03040a,
+            #070912 50%,
+            #04050a
+        );
+
+}
+
+
+/* =========================================================
+   COSMIC STARS
+========================================================= */
+
+body::before {
+
+    content: "";
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: .38;
+
+    z-index: -5;
+
+    background-image:
+
+        radial-gradient(
+            1px 1px at 8% 12%,
+            white,
+            transparent
+        ),
+
+        radial-gradient(
+            1px 1px at 16% 72%,
+            white,
+            transparent
+        ),
+
+        radial-gradient(
+            1px 1px at 28% 31%,
+            white,
+            transparent
+        ),
+
+        radial-gradient(
+            1px 1px at 42% 84%,
+            white,
+            transparent
+        ),
+
+        radial-gradient(
+            1px 1px at 54% 17%,
+            white,
+            transparent
+        ),
+
+        radial-gradient(
+            1px 1px at 66% 64%,
+            white,
+            transparent
+        ),
+
+        radial-gradient(
+            1px 1px at 79% 28%,
+            white,
+            transparent
+        ),
+
+        radial-gradient(
+            1px 1px at 91% 76%,
+            white,
+            transparent
+        );
+
+    background-size:
+        320px 320px;
+
+}
+
+
+/* =========================================================
+   3D FLOATING ORBS
+========================================================= */
+
+.orb {
+
+    position: fixed;
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    filter: blur(1px);
+
+    z-index: -3;
+
+    transform-style: preserve-3d;
+
+}
+
+.orb.one {
+
+    width: 260px;
+    height: 260px;
+
+    top: 12%;
+    left: -100px;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            rgba(177,151,255,.2),
+            rgba(87,50,255,.04) 50%,
+            transparent 70%
+        );
+
+    box-shadow:
+        inset -25px -25px 70px rgba(0,0,0,.5),
+        0 0 100px rgba(111,75,255,.08);
+
+    animation:
+        floatOne 11s ease-in-out infinite;
+
+}
+
+
+.orb.two {
+
+    width: 190px;
+    height: 190px;
+
+    right: -70px;
+    top: 38%;
+
+    background:
+        radial-gradient(
+            circle at 30% 25%,
+            rgba(90,221,255,.15),
+            rgba(43,91,255,.03) 55%,
+            transparent 70%
+        );
+
+    animation:
+        floatTwo 14s ease-in-out infinite;
+
+}
+
+
+.orb.three {
+
+    width: 120px;
+    height: 120px;
+
+    left: 40%;
+    bottom: -60px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(199,92,255,.12),
+            transparent 70%
+        );
+
+    animation:
+        floatThree 9s ease-in-out infinite;
+
+}
+
+
+@keyframes floatOne {
+
+    0%,100% {
+        transform:
+            translate3d(0,0,0)
+            rotate(0deg);
+    }
+
+    50% {
+        transform:
+            translate3d(35px,25px,30px)
+            rotate(15deg);
+    }
+
+}
+
+
+@keyframes floatTwo {
+
+    0%,100% {
+        transform:
+            translate3d(0,0,0);
+    }
+
+    50% {
+        transform:
+            translate3d(-25px,-35px,20px);
+    }
+
+}
+
+
+@keyframes floatThree {
+
+    0%,100% {
+        transform:
+            translate3d(0,0,0)
+            scale(1);
+    }
+
+    50% {
+        transform:
+            translate3d(0,-30px,20px)
+            scale(1.15);
+    }
+
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
+.container {
+
+    width:
+        min(
+            1250px,
+            calc(100% - 40px)
+        );
+
+    margin:
+        auto;
+
+    padding:
+        38px 0 80px;
+
+}
+
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.topbar {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    margin-bottom:
+        55px;
+
+}
+
+
+.logo {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        13px;
+
+}
+
+
+.logo-symbol {
+
+    width:
+        43px;
+
+    height:
+        43px;
+
+    border-radius:
+        15px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    font-size:
+        18px;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(155,124,255,.18),
+            rgba(91,221,255,.05)
+        );
+
+    border:
+        1px solid
+        rgba(155,124,255,.22);
+
+    box-shadow:
+
+        0 0 30px
+        rgba(155,124,255,.12);
+
+}
+
+
+.logo-text {
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        3px;
+
+    font-size:
+        18px;
+
+}
+
+
+.logo-sub {
+
+    color:
+        var(--dim);
+
+    font-size:
+        8px;
+
+    letter-spacing:
+        2px;
+
+    margin-top:
+        3px;
+
+}
+
+
+.top-status {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        10px;
+
+    letter-spacing:
+        1px;
+
+}
+
+
+.status-dot {
+
+    width:
+        6px;
+
+    height:
+        6px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--green);
+
+    box-shadow:
+        0 0 12px
+        rgba(91,230,168,.8);
+
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+
+    text-align:
+        center;
+
+    max-width:
+        850px;
+
+    margin:
+        0 auto 65px;
+
+}
+
+
+.hero-eyebrow {
+
+    color:
+        var(--purple);
+
+    font-size:
+        10px;
+
+    font-weight:
+        700;
+
+    letter-spacing:
+        4px;
+
+    text-transform:
+        uppercase;
+
+    margin-bottom:
+        18px;
+
+}
+
+
+.hero h1 {
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size:
+        clamp(
+            43px,
+            7vw,
+            76px
+        );
+
+    line-height:
+        .98;
+
+    letter-spacing:
+        -3.5px;
+
+    font-weight:
+        600;
+
+}
+
+
+.hero h1 span {
+
+    background:
+
+        linear-gradient(
+            90deg,
+            #ffffff 0%,
+            #a995ff 45%,
+            #6ddfff 100%
+        );
+
+    -webkit-background-clip:
+        text;
+
+    background-clip:
+        text;
+
+    color:
+        transparent;
+
+}
+
+
+.hero p {
+
+    color:
+        var(--muted);
+
+    max-width:
+        500px;
+
+    margin:
+        20px auto 0;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.7;
+
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section {
+
+    margin-bottom:
+        48px;
+
+}
+
+
+.section-heading {
+
+    display:
+        flex;
+
+    align-items:
+        end;
+
+    justify-content:
+        space-between;
+
+    margin-bottom:
+        16px;
+
+}
+
+
+.section-title {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+}
+
+
+.section-icon {
+
+    width:
+        31px;
+
+    height:
+        31px;
+
+    border-radius:
+        10px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    font-size:
+        13px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid
+        var(--border);
+
+}
+
+
+.section-heading h2 {
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size:
+        17px;
+
+    font-weight:
+        600;
+
+}
+
+
+.section-heading p {
+
+    color:
+        var(--dim);
+
+    font-size:
+        10px;
+
+    margin-top:
+        3px;
+
+}
+
+
+.section-line {
+
+    height:
+        1px;
+
+    flex:
+        1;
+
+    margin-left:
+        18px;
+
+    margin-bottom:
+        8px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--border),
+            transparent
+        );
+
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.social-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap:
+        15px;
+
+}
+
+
+.physical-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap:
+        15px;
+
+}
+
+
+.goal-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr;
+
+}
+
+
+/* =========================================================
+   GLASS CARD
+========================================================= */
+
+.card {
+
+    position:
+        relative;
+
+    min-height:
+        210px;
+
+    padding:
+        24px;
+
+    border-radius:
+        22px;
+
+    border:
+        1px solid
+        var(--border);
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(21,25,40,.68),
+            rgba(8,10,17,.58)
+        );
+
+    backdrop-filter:
+        blur(18px);
+
+    -webkit-backdrop-filter:
+        blur(18px);
+
+    box-shadow:
+        var(--shadow);
+
+    overflow:
+        hidden;
+
+    cursor:
+        pointer;
+
+    transform-style:
+        preserve-3d;
+
+    transition:
+        border-color .3s,
+        box-shadow .3s,
+        transform .25s;
+
+}
+
+
+.card::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        220px;
+
+    height:
+        220px;
+
+    border-radius:
+        50%;
+
+    right:
+        -130px;
+
+    top:
+        -130px;
+
+    background:
+        radial-gradient(
+            circle,
+            var(--card-glow, rgba(155,124,255,.17)),
+            transparent 70%
+        );
+
+    transition:
+        .35s;
+
+}
+
+
+.card::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    background:
+
+        linear-gradient(
+            120deg,
+            transparent 25%,
+            rgba(255,255,255,.035),
+            transparent 70%
+        );
+
+    transform:
+        translateX(-100%);
+
+    transition:
+        .7s;
+
+}
+
+
+.card:hover {
+
+    border-color:
+        var(--border-hover);
+
+    box-shadow:
+
+        0 35px 100px
+        rgba(0,0,0,.58),
+
+        0 0 45px
+        rgba(126,89,255,.06);
+
+}
+
+
+.card:hover::after {
+
+    transform:
+        translateX(100%);
+
+}
+
+
+.card:hover::before {
+
+    transform:
+        scale(1.3);
+
+}
+
+
+/* Card content */
+
+.card-content {
+
+    position:
+        relative;
+
+    z-index:
+        2;
+
+    height:
+        100%;
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+}
+
+
+.card-icon {
+
+    width:
+        48px;
+
+    height:
+        48px;
+
+    border-radius:
+        15px;
+
+    display:
+        grid;
+
+    place-items:
+        center;
+
+    font-size:
+        20px;
+
+    margin-bottom:
+        22px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    box-shadow:
+        inset
+        0 1px 0
+        rgba(255,255,255,.05);
+
+    transform:
+        translateZ(35px);
+
+}
+
+
+.card h3 {
+
+    font-family:
+        "Space Grotesk",
+        sans-serif;
+
+    font-size:
+        21px;
+
+    font-weight:
+        600;
+
+    transform:
+        translateZ(25px);
+
+}
+
+
+.card-description {
+
+    color:
+        var(--muted);
+
+    font-size:
+        11px;
+
+    line-height:
+        1.55;
+
+    margin-top:
+        6px;
+
+    max-width:
+        280px;
+
+    transform:
+        translateZ(20px);
+
+}
+
+
+.open {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+    margin-top:
+        auto;
+
+    padding-top:
+        22px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        10px;
+
+    font-weight:
+        600;
+
+    letter-spacing:
+        1px;
+
+    text-transform:
+        uppercase;
+
+    transform:
+        translateZ(30px);
+
+}
+
+
+.open-arrow {
+
+    transition:
+        transform .25s;
+
+}
+
+
+.card:hover .open-arrow {
+
+    transform:
+        translateX(5px);
+
+}
+
+
+/* =========================================================
+   CARD THEMES
+========================================================= */
+
+.people {
+
+    --card-glow:
+        rgba(255,118,183,.16);
+
+}
+
+
+.people .card-icon {
+
+    color:
+        var(--pink);
+
+}
+
+
+.approach {
+
+    --card-glow:
+        rgba(155,124,255,.18);
+
+}
+
+
+.approach .card-icon {
+
+    color:
+        var(--purple);
+
+}
+
+
+.gym {
+
+    --card-glow:
+        rgba(255,189,114,.17);
+
+}
+
+
+.gym .card-icon {
+
+    color:
+        var(--orange);
+
+}
+
+
+.facial {
+
+    --card-glow:
+        rgba(98,221,255,.16);
+
+}
+
+
+.facial .card-icon {
+
+    color:
+        var(--cyan);
+
+}
+
+
+.diet {
+
+    --card-glow:
+        rgba(91,230,168,.15);
+
+}
+
+
+.diet .card-icon {
+
+    color:
+        var(--green);
+
+}
+
+
+/* =========================================================
+   GOAL CARD
+========================================================= */
+
+.goal-card {
+
+    min-height:
+        180px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        30px;
+
+    --card-glow:
+        rgba(155,124,255,.2);
+
+}
+
+
+.goal-left {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        20px;
+
+}
+
+
+.goal-card .card-icon {
+
+    width:
+        62px;
+
+    height:
+        62px;
+
+    font-size:
+        25px;
+
+    margin:
+        0;
+
+}
+
+
+.goal-info h3 {
+
+    font-size:
+        25px;
+
+}
+
+
+.goal-info p {
+
+    max-width:
+        500px;
+
+}
+
+
+.goal-action {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        45px;
+
+    height:
+        45px;
+
+    border-radius:
+        14px;
+
+    border:
+        1px solid
+        rgba(155,124,255,.2);
+
+    color:
+        var(--purple);
+
+    background:
+        rgba(155,124,255,.06);
+
+    font-size:
+        20px;
+
+    flex-shrink:
+        0;
+
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
+
+    text-align:
+        center;
+
+    color:
+        var(--dim);
+
+    font-size:
+        9px;
+
+    letter-spacing:
+        2px;
+
+    padding-top:
+        5px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 850px) {
+
+    .physical-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .container {
+
+        width:
+            calc(100% - 24px);
+
+        padding-top:
+            22px;
+
+    }
+
+
+    .topbar {
+
+        margin-bottom:
+            38px;
+
+    }
+
+
+    .hero {
+
+        margin-bottom:
+            45px;
+
+    }
+
+
+    .hero h1 {
+
+        letter-spacing:
+            -2.5px;
+
+    }
+
+
+    .social-grid,
+    .physical-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .card {
+
+        min-height:
+            190px;
+
+    }
+
+
+    .goal-card {
+
+        align-items:
+            flex-start;
+
+    }
+
+
+    .goal-left {
+
+        align-items:
+            flex-start;
+
+    }
+
+
+    .goal-info h3 {
+
+        font-size:
+            21px;
+
+    }
+
+
+    .section-line {
+
+        display:
+            none;
+
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration:
+            .01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+
+        transition-duration:
+            .01ms !important;
+
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- 3D COSMIC ORBS -->
+
+<div class="orb one"></div>
+<div class="orb two"></div>
+<div class="orb three"></div>
+
+
+<div class="container">
+
+
+    <!-- =====================================================
+         TOP BAR
+    ====================================================== -->
+
+    <div class="topbar">
+
+        <div class="logo">
+
+            <div class="logo-symbol">
+                ◈
+            </div>
+
+            <div>
+
+                <div class="logo-text">
+                    COMMAND
+                </div>
+
+                <div class="logo-sub">
+                    PERSONAL SYSTEM
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="top-status">
+
+            <span class="status-dot"></span>
+
+            SYSTEM ACTIVE
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="hero">
+
+        <div class="hero-eyebrow">
+            Personal Command Center
+        </div>
+
+        <h1>
+            Design your life.<br>
+            <span>One day at a time.</span>
+        </h1>
+
+        <p>
+            Everything important, organized in one place —
+            social, physical, and the goals you're moving toward.
+        </p>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         SOCIAL
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="section-title">
+
+                <div class="section-icon">
+                    ◎
+                </div>
+
+                <div>
+
+                    <h2>
+                        SOCIAL
+                    </h2>
+
+                    <p>
+                        People & relationships
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="section-line"></div>
+
+        </div>
+
+
+        <div class="social-grid">
+
+
+            <!-- PEOPLE -->
+
+            <div
+                class="card people"
+                onclick="navigate('people.html')"
+                data-tilt
+            >
+
+                <div class="card-content">
+
+                    <div class="card-icon">
+                        ♡
+                    </div>
+
+                    <h3>
+                        People
+                    </h3>
+
+                    <p class="card-description">
+                        Keep track of the people
+                        who matter and your
+                        interactions with them.
+                    </p>
+
+                    <div class="open">
+                        Open
+                        <span class="open-arrow">
+                            →
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- APPROACH -->
+
+            <div
+                class="card approach"
+                onclick="navigate('approach.html')"
+                data-tilt
+            >
+
+                <div class="card-content">
+
+                    <div class="card-icon">
+                        ✦
+                    </div>
+
+                    <h3>
+                        Approach
+                    </h3>
+
+                    <p class="card-description">
+                        Remember who you need
+                        to approach, why, and
+                        what you want to say.
+                    </p>
+
+                    <div class="open">
+                        Open
+                        <span class="open-arrow">
+                            →
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         PHYSICAL
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="section-title">
+
+                <div class="section-icon">
+                    ◉
+                </div>
+
+                <div>
+
+                    <h2>
+                        PHYSICAL
+                    </h2>
+
+                    <p>
+                        Body, health & discipline
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="section-line"></div>
+
+        </div>
+
+
+        <div class="physical-grid">
+
+
+            <!-- GYM -->
+
+            <div
+                class="card gym"
+                onclick="navigate('gym.html')"
+                data-tilt
+            >
+
+                <div class="card-content">
+
+                    <div class="card-icon">
+                        ⚡
+                    </div>
+
+                    <h3>
+                        Gym
+                    </h3>
+
+                    <p class="card-description">
+                        Track workouts, exercises,
+                        sets, reps and progressive
+                        strength.
+                    </p>
+
+                    <div class="open">
+                        Train
+                        <span class="open-arrow">
+                            →
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FACIAL -->
+
+            <div
+                class="card facial"
+                onclick="navigate('facial.html')"
+                data-tilt
+            >
+
+                <div class="card-content">
+
+                    <div class="card-icon">
+                        ✧
+                    </div>
+
+                    <h3>
+                        Facial
+                    </h3>
+
+                    <p class="card-description">
+                        Maintain your facial
+                        exercise routine and
+                        consistency.
+                    </p>
+
+                    <div class="open">
+                        Practice
+                        <span class="open-arrow">
+                            →
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- DIET -->
+
+            <div
+                class="card diet"
+                onclick="navigate('diet.html')"
+                data-tilt
+            >
+
+                <div class="card-content">
+
+                    <div class="card-icon">
+                        ◇
+                    </div>
+
+                    <h3>
+                        Diet
+                    </h3>
+
+                    <p class="card-description">
+                        Organize today's meals
+                        and keep your nutrition
+                        on schedule.
+                    </p>
+
+                    <div class="open">
+                        Eat
+                        <span class="open-arrow">
+                            →
+                        </span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         GOAL
+    ====================================================== -->
+
+    <section class="section">
+
+        <div class="section-heading">
+
+            <div class="section-title">
+
+                <div class="section-icon">
+                    ◇
+                </div>
+
+                <div>
+
+                    <h2>
+                        GOAL
+                    </h2>
+
+                    <p>
+                        Direction & ambition
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="section-line"></div>
+
+        </div>
+
+
+        <div class="goal-grid">
+
+
+            <div
+                class="card goal-card"
+                data-tilt
+            >
+
+                <div class="goal-left">
+
+                    <div class="card-icon">
+                        ◆
+                    </div>
+
+                    <div class="goal-info">
+
+                        <h3>
+                            Your Goals
+                        </h3>
+
+                        <p class="card-description">
+                            Define what you're working
+                            toward and keep your daily
+                            actions aligned with the bigger picture.
+                        </p>
+
+                        <div class="open">
+                            Coming next
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="goal-action">
+                    +
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <div class="footer">
+
+        YOUR SYSTEM · YOUR DISCIPLINE · YOUR EVOLUTION
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function navigate(page) {
+
+    window.location.href = page;
+
+}
+
+
+/* =========================================================
+   3D CARD TILT
+========================================================= */
+
+const cards =
+    document.querySelectorAll(
+        "[data-tilt]"
+    );
+
+
+cards.forEach(card => {
+
+    card.addEventListener(
+        "mousemove",
+        event => {
+
+            if (
+                window.innerWidth < 700
+            ) {
+                return;
+            }
+
+
+            const rect =
+                card.getBoundingClientRect();
+
+
+            const x =
+                event.clientX -
+                rect.left;
+
+
+            const y =
+                event.clientY -
+                rect.top;
+
+
+            const centerX =
+                rect.width / 2;
+
+
+            const centerY =
+                rect.height / 2;
+
+
+            const rotateX =
+                ((y - centerY) /
+                centerY) *
+                -3.5;
+
+
+            const rotateY =
+                ((x - centerX) /
+                centerX) *
+                3.5;
+
+
+            card.style.transform =
+
+                `perspective(900px)
+                 rotateX(${rotateX}deg)
+                 rotateY(${rotateY}deg)
+                 translateZ(8px)`;
+
+        }
+    );
+
+
+    card.addEventListener(
+        "mouseleave",
+        () => {
+
+            card.style.transform =
+                "";
+
+        }
+    );
+
+});
+
+
+/* =========================================================
+   PARALLAX BACKGROUND
+========================================================= */
+
+document.addEventListener(
+    "mousemove",
+    event => {
+
+        if (
+            window.innerWidth < 700
+        ) {
+            return;
+        }
+
+
+        const x =
+            (event.clientX /
+            window.innerWidth - .5);
+
+
+        const y =
+            (event.clientY /
+            window.innerHeight - .5);
+
+
+        const orbOne =
+            document.querySelector(
+                ".orb.one"
+            );
+
+
+        const orbTwo =
+            document.querySelector(
+                ".orb.two"
+            );
+
+
+        if (orbOne) {
+
+            orbOne.style.marginLeft =
+                `${x * 20}px`;
+
+            orbOne.style.marginTop =
+                `${y * 15}px`;
+
+        }
+
+
+        if (orbTwo) {
+
+            orbTwo.style.marginRight =
+                `${x * 15}px`;
+
+            orbTwo.style.marginTop =
+                `${y * 20}px`;
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   FADE-IN ON LOAD
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const sections =
+            document.querySelectorAll(
+                ".section"
+            );
+
+
+        sections.forEach(
+            (section, index) => {
+
+                section.style.opacity = "0";
+
+                section.style.transform =
+                    "translateY(15px)";
+
+
+                setTimeout(
+                    () => {
+
+                        section.style.transition =
+                            "opacity .6s ease, transform .6s ease";
+
+                        section.style.opacity =
+                            "1";
+
+                        section.style.transform =
+                            "translateY(0)";
+
+                    },
+                    150 + index * 120
+                );
+
+            }
+        );
+
+    }
+);
+
+</script>
+
+</body>
+</html>

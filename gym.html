@@ -1,0 +1,2473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GYM — Cosmic Training</title>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+    :root {
+        --bg: #05060b;
+        --bg2: #090b14;
+        --card: rgba(15, 17, 29, 0.72);
+        --card-solid: #10121d;
+        --border: rgba(255,255,255,0.09);
+        --border-hover: rgba(167,139,250,0.35);
+
+        --text: #f5f5f7;
+        --muted: #9296a8;
+        --dim: #626779;
+
+        --purple: #9b7cff;
+        --purple2: #7657ff;
+        --cyan: #58d9ff;
+        --green: #55e6a5;
+        --red: #ff667d;
+        --orange: #ffb86b;
+
+        --shadow: 0 25px 80px rgba(0,0,0,.45);
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        min-height: 100vh;
+        background:
+            radial-gradient(circle at 15% 10%, rgba(121, 84, 255, .13), transparent 30%),
+            radial-gradient(circle at 85% 15%, rgba(44, 183, 255, .08), transparent 28%),
+            radial-gradient(circle at 50% 100%, rgba(124, 76, 255, .08), transparent 35%),
+            var(--bg);
+        color: var(--text);
+        font-family: Inter, sans-serif;
+        overflow-x: hidden;
+    }
+
+    /* Cosmic background */
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: .35;
+        background-image:
+            radial-gradient(1px 1px at 10% 20%, white, transparent),
+            radial-gradient(1px 1px at 20% 70%, white, transparent),
+            radial-gradient(1px 1px at 35% 30%, white, transparent),
+            radial-gradient(1px 1px at 55% 15%, white, transparent),
+            radial-gradient(1px 1px at 72% 65%, white, transparent),
+            radial-gradient(1px 1px at 88% 25%, white, transparent),
+            radial-gradient(1px 1px at 93% 80%, white, transparent),
+            radial-gradient(1px 1px at 47% 85%, white, transparent);
+        background-size: 280px 280px;
+        z-index: -2;
+    }
+
+    body::after {
+        content: "";
+        position: fixed;
+        width: 500px;
+        height: 500px;
+        left: -250px;
+        top: 30%;
+        border-radius: 50%;
+        background: rgba(112, 72, 255, .08);
+        filter: blur(100px);
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .app {
+        width: min(1400px, calc(100% - 40px));
+        margin: auto;
+        padding: 28px 0 70px;
+    }
+
+    /* Header */
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 35px;
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .brand-orbit {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        position: relative;
+        background: radial-gradient(circle at 35% 35%, #d7caff, #7357ff 42%, #261a5e);
+        box-shadow:
+            0 0 25px rgba(130, 92, 255, .45),
+            inset 0 0 20px rgba(255,255,255,.15);
+    }
+
+    .brand-orbit::before {
+        content: "";
+        position: absolute;
+        width: 55px;
+        height: 20px;
+        border: 1px solid rgba(255,255,255,.35);
+        border-radius: 50%;
+        transform: rotate(-25deg);
+        left: -6px;
+        top: 12px;
+    }
+
+    .brand h1 {
+        font-family: "Space Grotesk", sans-serif;
+        letter-spacing: 3px;
+        font-size: 22px;
+    }
+
+    .brand span {
+        display: block;
+        color: var(--muted);
+        font-size: 11px;
+        letter-spacing: 2px;
+        margin-top: 2px;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 9px;
+    }
+
+    .icon-btn {
+        width: 42px;
+        height: 42px;
+        border: 1px solid var(--border);
+        border-radius: 13px;
+        background: rgba(255,255,255,.035);
+        color: var(--muted);
+        cursor: pointer;
+        transition: .25s;
+        font-size: 17px;
+    }
+
+    .icon-btn:hover {
+        color: white;
+        border-color: var(--border-hover);
+        background: rgba(155,124,255,.08);
+        transform: translateY(-2px);
+    }
+
+    /* Hero */
+
+    .hero {
+        display: grid;
+        grid-template-columns: 1.4fr .6fr;
+        gap: 18px;
+        margin-bottom: 18px;
+    }
+
+    .hero-card,
+    .stat-card,
+    .panel {
+        border: 1px solid var(--border);
+        background: linear-gradient(
+            145deg,
+            rgba(21,24,40,.82),
+            rgba(9,11,19,.72)
+        );
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 25px;
+        box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+        padding: 34px;
+        min-height: 220px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-card::after {
+        content: "";
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        border-radius: 50%;
+        right: -100px;
+        top: -100px;
+        background: radial-gradient(circle, rgba(143,112,255,.3), transparent 65%);
+        pointer-events: none;
+    }
+
+    .eyebrow {
+        color: var(--purple);
+        font-size: 11px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .hero-card h2 {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: clamp(30px, 4vw, 48px);
+        line-height: 1.05;
+        letter-spacing: -1.8px;
+        max-width: 650px;
+    }
+
+    .hero-card h2 span {
+        background: linear-gradient(90deg, #fff, #a78bfa, #6ee7ff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .hero-date {
+        color: var(--muted);
+        margin-top: 16px;
+        font-size: 14px;
+    }
+
+    .stat-card {
+        padding: 28px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .stat-label {
+        color: var(--muted);
+        font-size: 12px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    .stat-number {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 50px;
+        font-weight: 700;
+        line-height: 1;
+        margin: 10px 0;
+        background: linear-gradient(135deg, #fff, #9b7cff);
+        -webkit-background-clip: text;
+        color: transparent;
+    }
+
+    .stat-small {
+        color: var(--dim);
+        font-size: 12px;
+    }
+
+    /* Navigation */
+
+    .tabs {
+        display: flex;
+        gap: 7px;
+        margin: 20px 0;
+        padding: 5px;
+        width: fit-content;
+        background: rgba(255,255,255,.035);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+    }
+
+    .tab {
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        padding: 10px 17px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: .25s;
+    }
+
+    .tab.active {
+        color: white;
+        background: rgba(155,124,255,.14);
+        box-shadow: inset 0 0 0 1px rgba(155,124,255,.18);
+    }
+
+    /* Sections */
+
+    .section {
+        display: none;
+        animation: fadeUp .35s ease;
+    }
+
+    .section.active {
+        display: block;
+    }
+
+    @keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .section-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .section-heading h3 {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 20px;
+    }
+
+    .section-heading p {
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 4px;
+    }
+
+    .primary-btn {
+        border: 0;
+        padding: 12px 17px;
+        border-radius: 12px;
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        background: linear-gradient(135deg, var(--purple2), #a078ff);
+        box-shadow: 0 8px 25px rgba(118,87,255,.22);
+        transition: .25s;
+    }
+
+    .primary-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(118,87,255,.35);
+    }
+
+    .plus {
+        font-size: 18px;
+        margin-right: 5px;
+        vertical-align: -1px;
+    }
+
+    /* Today */
+
+    .today-card {
+        padding: 22px;
+    }
+
+    .today-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 18px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 18px;
+    }
+
+    .today-day {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .date-box {
+        width: 52px;
+        height: 58px;
+        border-radius: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(145deg, rgba(155,124,255,.18), rgba(88,217,255,.06));
+        border: 1px solid rgba(155,124,255,.22);
+    }
+
+    .date-box strong {
+        font-family: "Space Grotesk";
+        font-size: 20px;
+    }
+
+    .date-box small {
+        color: var(--purple);
+        font-size: 9px;
+        text-transform: uppercase;
+    }
+
+    .today-day h3 {
+        font-family: "Space Grotesk";
+        font-size: 18px;
+    }
+
+    .today-day p {
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 3px;
+    }
+
+    .progress-wrap {
+        min-width: 220px;
+    }
+
+    .progress-info {
+        display: flex;
+        justify-content: space-between;
+        color: var(--muted);
+        font-size: 11px;
+        margin-bottom: 7px;
+    }
+
+    .progress {
+        height: 5px;
+        background: rgba(255,255,255,.07);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress > div {
+        height: 100%;
+        width: 0%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, var(--purple), var(--cyan));
+        box-shadow: 0 0 15px rgba(125,100,255,.6);
+        transition: .4s;
+    }
+
+    /* Exercise cards */
+
+    .exercise-list {
+        display: grid;
+        gap: 12px;
+    }
+
+    .exercise-card {
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,.025);
+        border-radius: 18px;
+        overflow: hidden;
+        transition: .25s;
+    }
+
+    .exercise-card:hover {
+        border-color: rgba(155,124,255,.22);
+        background: rgba(255,255,255,.035);
+    }
+
+    .exercise-header {
+        padding: 17px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    .exercise-name-wrap {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .exercise-number {
+        width: 35px;
+        height: 35px;
+        display: grid;
+        place-items: center;
+        border-radius: 11px;
+        color: var(--purple);
+        background: rgba(155,124,255,.1);
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .exercise-name {
+        font-weight: 700;
+    }
+
+    .set-count {
+        color: var(--muted);
+        font-size: 11px;
+        margin-top: 3px;
+    }
+
+    .exercise-actions {
+        display: flex;
+        gap: 7px;
+    }
+
+    .small-btn {
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,.035);
+        color: var(--muted);
+        border-radius: 10px;
+        padding: 8px 10px;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+    .small-btn:hover {
+        color: white;
+        border-color: var(--border-hover);
+    }
+
+    .small-btn.complete {
+        color: var(--green);
+        border-color: rgba(85,230,165,.2);
+        background: rgba(85,230,165,.06);
+    }
+
+    .sets {
+        padding: 0 18px 18px;
+    }
+
+    .set-table {
+        border: 1px solid var(--border);
+        border-radius: 13px;
+        overflow: hidden;
+    }
+
+    .set-head,
+    .set-row {
+        display: grid;
+        grid-template-columns: 55px 1fr 1fr 1fr 45px;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 11px;
+    }
+
+    .set-head {
+        background: rgba(255,255,255,.035);
+        color: var(--dim);
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .set-row {
+        border-top: 1px solid var(--border);
+    }
+
+    .set-row > span {
+        color: var(--muted);
+        font-size: 12px;
+    }
+
+    .input {
+        width: 100%;
+        min-width: 0;
+        border: 1px solid rgba(255,255,255,.07);
+        outline: none;
+        border-radius: 9px;
+        background: rgba(0,0,0,.22);
+        color: white;
+        padding: 9px 10px;
+        font-family: inherit;
+        font-size: 12px;
+        transition: .2s;
+    }
+
+    .input:focus {
+        border-color: rgba(155,124,255,.55);
+        box-shadow: 0 0 0 3px rgba(155,124,255,.07);
+    }
+
+    .delete-set {
+        border: 0;
+        background: transparent;
+        color: var(--dim);
+        cursor: pointer;
+        font-size: 15px;
+    }
+
+    .delete-set:hover {
+        color: var(--red);
+    }
+
+    .add-set {
+        margin-top: 9px;
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px dashed rgba(255,255,255,.1);
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        transition: .2s;
+    }
+
+    .add-set:hover {
+        color: white;
+        border-color: rgba(155,124,255,.35);
+        background: rgba(155,124,255,.04);
+    }
+
+    .empty {
+        padding: 55px 20px;
+        text-align: center;
+        color: var(--dim);
+        border: 1px dashed var(--border);
+        border-radius: 18px;
+    }
+
+    .empty-icon {
+        font-size: 35px;
+        opacity: .55;
+        margin-bottom: 10px;
+    }
+
+    .empty strong {
+        display: block;
+        color: var(--muted);
+        margin-bottom: 5px;
+    }
+
+    .empty p {
+        font-size: 12px;
+    }
+
+    /* Library */
+
+    .library-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+
+    .library-item {
+        padding: 17px;
+        border-radius: 17px;
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,.025);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: .2s;
+    }
+
+    .library-item:hover {
+        transform: translateY(-2px);
+        border-color: rgba(155,124,255,.25);
+    }
+
+    .library-item-left {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+    }
+
+    .library-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--purple);
+        box-shadow: 0 0 12px rgba(155,124,255,.6);
+    }
+
+    .library-name {
+        font-weight: 600;
+        font-size: 13px;
+    }
+
+    .delete-exercise {
+        border: 0;
+        background: transparent;
+        color: var(--dim);
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .delete-exercise:hover {
+        color: var(--red);
+    }
+
+    /* History */
+
+    .history-list {
+        display: grid;
+        gap: 12px;
+    }
+
+    .history-card {
+        padding: 19px;
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,.025);
+        border-radius: 17px;
+    }
+
+    .history-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 14px;
+    }
+
+    .history-date {
+        font-family: "Space Grotesk";
+        font-weight: 700;
+    }
+
+    .history-meta {
+        color: var(--muted);
+        font-size: 11px;
+        margin-top: 4px;
+    }
+
+    .completed-pill {
+        color: var(--green);
+        border: 1px solid rgba(85,230,165,.2);
+        background: rgba(85,230,165,.06);
+        padding: 6px 9px;
+        border-radius: 9px;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .history-exercises {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+    }
+
+    .history-exercise {
+        padding: 7px 9px;
+        border-radius: 8px;
+        background: rgba(255,255,255,.045);
+        color: var(--muted);
+        font-size: 11px;
+    }
+
+    /* Modal */
+
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(0,0,0,.72);
+        backdrop-filter: blur(12px);
+        z-index: 100;
+    }
+
+    .modal-overlay.show {
+        display: flex;
+        animation: modalFade .2s ease;
+    }
+
+    @keyframes modalFade {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .modal {
+        width: min(470px, 100%);
+        padding: 25px;
+        border-radius: 22px;
+        border: 1px solid rgba(255,255,255,.1);
+        background:
+            radial-gradient(circle at 90% 0%, rgba(125,92,255,.15), transparent 35%),
+            #0d0f18;
+        box-shadow: 0 30px 100px rgba(0,0,0,.7);
+        animation: modalUp .25s ease;
+    }
+
+    @keyframes modalUp {
+        from {
+            opacity: 0;
+            transform: translateY(15px) scale(.98);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 22px;
+    }
+
+    .modal-header h3 {
+        font-family: "Space Grotesk";
+        font-size: 20px;
+    }
+
+    .close {
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 21px;
+    }
+
+    .form-label {
+        display: block;
+        color: var(--muted);
+        font-size: 11px;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .form-input {
+        width: 100%;
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,.035);
+        color: white;
+        outline: none;
+        border-radius: 12px;
+        padding: 13px;
+        font-family: inherit;
+        font-size: 14px;
+    }
+
+    .form-input:focus {
+        border-color: rgba(155,124,255,.55);
+        box-shadow: 0 0 0 4px rgba(155,124,255,.06);
+    }
+
+    .modal-note {
+        color: var(--dim);
+        font-size: 11px;
+        margin-top: 8px;
+    }
+
+    .modal-actions {
+        display: flex;
+        gap: 9px;
+        margin-top: 22px;
+    }
+
+    .secondary-btn {
+        flex: 1;
+        padding: 12px;
+        border-radius: 11px;
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,.035);
+        color: var(--muted);
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .modal-actions .primary-btn {
+        flex: 1;
+    }
+
+    /* Toast */
+
+    .toast-container {
+        position: fixed;
+        right: 22px;
+        bottom: 22px;
+        z-index: 200;
+        display: grid;
+        gap: 9px;
+    }
+
+    .toast {
+        min-width: 250px;
+        padding: 13px 15px;
+        border-radius: 13px;
+        border: 1px solid var(--border);
+        background: rgba(17,19,30,.94);
+        backdrop-filter: blur(15px);
+        box-shadow: 0 15px 40px rgba(0,0,0,.4);
+        animation: toastIn .3s ease;
+        font-size: 12px;
+    }
+
+    .toast.success {
+        border-color: rgba(85,230,165,.22);
+    }
+
+    .toast.error {
+        border-color: rgba(255,102,125,.22);
+    }
+
+    @keyframes toastIn {
+        from {
+            opacity: 0;
+            transform: translateX(15px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /* End day */
+
+    .end-day {
+        margin-top: 18px;
+        padding: 20px;
+        border: 1px solid rgba(255,255,255,.08);
+        border-radius: 18px;
+        background: linear-gradient(90deg, rgba(155,124,255,.06), rgba(88,217,255,.03));
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .end-day h4 {
+        font-family: "Space Grotesk";
+        margin-bottom: 4px;
+    }
+
+    .end-day p {
+        color: var(--muted);
+        font-size: 11px;
+    }
+
+    .end-btn {
+        padding: 12px 18px;
+        border: 1px solid rgba(85,230,165,.22);
+        color: var(--green);
+        background: rgba(85,230,165,.06);
+        border-radius: 11px;
+        font-weight: 700;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    .end-btn:hover {
+        background: rgba(85,230,165,.11);
+    }
+
+    /* Responsive */
+
+    @media (max-width: 900px) {
+        .hero {
+            grid-template-columns: 1fr;
+        }
+
+        .library-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 650px) {
+        .app {
+            width: min(100% - 22px, 1400px);
+            padding-top: 18px;
+        }
+
+        header {
+            margin-bottom: 22px;
+        }
+
+        .brand h1 {
+            font-size: 18px;
+        }
+
+        .brand-orbit {
+            width: 38px;
+            height: 38px;
+        }
+
+        .hero-card {
+            padding: 25px;
+        }
+
+        .hero-card h2 {
+            font-size: 31px;
+        }
+
+        .today-top {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .progress-wrap {
+            width: 100%;
+        }
+
+        .set-head,
+        .set-row {
+            grid-template-columns: 38px 1fr 1fr 1fr 30px;
+            gap: 5px;
+            padding: 8px 7px;
+        }
+
+        .library-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .end-day {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .end-btn {
+            width: 100%;
+        }
+
+        .tabs {
+            width: 100%;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px 7px;
+            font-size: 11px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+    <header>
+        <div class="brand">
+            <div class="brand-orbit"></div>
+            <div>
+                <h1>GYM</h1>
+                <span>COSMIC TRAINING SYSTEM</span>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <button class="icon-btn" onclick="exportData()" title="Export backup">↓</button>
+            <button class="icon-btn" onclick="document.getElementById('importFile').click()" title="Import backup">↑</button>
+            <input type="file" id="importFile" accept=".json" hidden onchange="importData(event)">
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <div class="hero">
+
+        <div class="hero-card">
+            <div class="eyebrow">Training Protocol</div>
+            <h2>
+                Build strength.<br>
+                <span>Track everything.</span>
+            </h2>
+            <div class="hero-date" id="heroDate"></div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">Total Workouts</div>
+            <div class="stat-number" id="totalWorkouts">0</div>
+            <div class="stat-small">Completed training sessions</div>
+        </div>
+
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab('today', this)">Today</button>
+        <button class="tab" onclick="switchTab('library', this)">Exercises</button>
+        <button class="tab" onclick="switchTab('history', this)">History</button>
+    </div>
+
+
+    <!-- TODAY -->
+    <section id="today" class="section active">
+
+        <div class="section-heading">
+            <div>
+                <h3>Today's Training</h3>
+                <p>Record your session, set by set.</p>
+            </div>
+
+            <button class="primary-btn" onclick="openAddTodayModal()">
+                <span class="plus">+</span> Add Exercise
+            </button>
+        </div>
+
+        <div class="panel today-card">
+
+            <div class="today-top">
+
+                <div class="today-day">
+                    <div class="date-box">
+                        <strong id="dayNumber">26</strong>
+                        <small id="monthShort">AUG</small>
+                    </div>
+
+                    <div>
+                        <h3 id="dayName">Wednesday</h3>
+                        <p id="fullDate">26 August 2026</p>
+                    </div>
+                </div>
+
+                <div class="progress-wrap">
+                    <div class="progress-info">
+                        <span>SESSION PROGRESS</span>
+                        <span id="progressText">0%</span>
+                    </div>
+
+                    <div class="progress">
+                        <div id="progressBar"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="todayExercises" class="exercise-list"></div>
+
+            <div class="end-day">
+                <div>
+                    <h4>Finish today's session</h4>
+                    <p>Save this workout permanently to your training history.</p>
+                </div>
+
+                <button class="end-btn" onclick="endDay()">
+                    ✓ End Day
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- LIBRARY -->
+    <section id="library" class="section">
+
+        <div class="section-heading">
+            <div>
+                <h3>Exercise Library</h3>
+                <p>Your personal exercise database.</p>
+            </div>
+
+            <button class="primary-btn" onclick="openExerciseModal()">
+                <span class="plus">+</span> Add Exercise
+            </button>
+        </div>
+
+        <div id="libraryGrid" class="library-grid"></div>
+
+    </section>
+
+
+    <!-- HISTORY -->
+    <section id="history" class="section">
+
+        <div class="section-heading">
+            <div>
+                <h3>Training History</h3>
+                <p>Every completed session, archived.</p>
+            </div>
+        </div>
+
+        <div id="historyList" class="history-list"></div>
+
+    </section>
+
+</div>
+
+
+<!-- ADD EXERCISE MODAL -->
+<div id="exerciseModal" class="modal-overlay" onclick="overlayClose(event, 'exerciseModal')">
+
+    <div class="modal">
+
+        <div class="modal-header">
+            <h3>Add Exercise</h3>
+            <button class="close" onclick="closeModal('exerciseModal')">×</button>
+        </div>
+
+        <label class="form-label">Exercise Name</label>
+
+        <input
+            id="exerciseNameInput"
+            class="form-input"
+            type="text"
+            placeholder="e.g. Incline Dumbbell Press"
+            autocomplete="off"
+        >
+
+        <div class="modal-note">
+            Exercise names are case-insensitive. Duplicate exercises won't be added.
+        </div>
+
+        <div class="modal-actions">
+            <button class="secondary-btn" onclick="closeModal('exerciseModal')">
+                Cancel
+            </button>
+
+            <button class="primary-btn" onclick="saveExercise()">
+                Add Exercise
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ADD TODAY EXERCISE MODAL -->
+<div id="todayModal" class="modal-overlay" onclick="overlayClose(event, 'todayModal')">
+
+    <div class="modal">
+
+        <div class="modal-header">
+            <h3>Add to Today's Workout</h3>
+            <button class="close" onclick="closeModal('todayModal')">×</button>
+        </div>
+
+        <label class="form-label">Choose Exercise</label>
+
+        <select id="todayExerciseSelect" class="form-input"></select>
+
+        <div class="modal-note">
+            Add exercises from your personal exercise library.
+        </div>
+
+        <div class="modal-actions">
+            <button class="secondary-btn" onclick="closeModal('todayModal')">
+                Cancel
+            </button>
+
+            <button class="primary-btn" onclick="addExerciseToToday()">
+                Add to Workout
+            </button>
+        </div>
+
+    </div>
+</div>
+
+
+<div id="toastContainer" class="toast-container"></div>
+
+
+<script>
+
+/* =========================================================
+   DATA
+========================================================= */
+
+const STORAGE_KEY = "cosmicGymData_v1";
+
+let data = {
+    exercises: [],
+    today: {
+        date: getDateKey(),
+        exercises: []
+    },
+    history: []
+};
+
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    loadData();
+
+    ensureToday();
+
+    updateDateUI();
+    renderEverything();
+
+    document.getElementById("exerciseNameInput")
+        .addEventListener("keydown", e => {
+            if (e.key === "Enter") saveExercise();
+        });
+});
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+function getDateKey(date = new Date()) {
+
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+
+    return `${y}-${m}-${d}`;
+}
+
+
+function updateDateUI() {
+
+    const now = new Date();
+
+    const dayNames = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+    ];
+
+    const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    ];
+
+    const monthShort = months[now.getMonth()].slice(0, 3).toUpperCase();
+
+    document.getElementById("dayNumber").textContent = now.getDate();
+    document.getElementById("monthShort").textContent = monthShort;
+    document.getElementById("dayName").textContent = dayNames[now.getDay()];
+
+    document.getElementById("fullDate").textContent =
+        `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+
+    document.getElementById("heroDate").textContent =
+        `${dayNames[now.getDay()]} · ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+}
+
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+function loadData() {
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if (!saved) return;
+
+    try {
+
+        const parsed = JSON.parse(saved);
+
+        data = {
+            exercises: Array.isArray(parsed.exercises)
+                ? parsed.exercises
+                : [],
+
+            today: parsed.today || {
+                date: getDateKey(),
+                exercises: []
+            },
+
+            history: Array.isArray(parsed.history)
+                ? parsed.history
+                : []
+        };
+
+    } catch (error) {
+
+        console.error("Data loading error:", error);
+
+        showToast("Could not load saved data.", "error");
+    }
+}
+
+
+function saveData() {
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(data)
+    );
+}
+
+
+/* =========================================================
+   TODAY MANAGEMENT
+========================================================= */
+
+function ensureToday() {
+
+    const todayKey = getDateKey();
+
+    if (!data.today || data.today.date !== todayKey) {
+
+        data.today = {
+            date: todayKey,
+            exercises: []
+        };
+
+        saveData();
+    }
+}
+
+
+/* =========================================================
+   TABS
+========================================================= */
+
+function switchTab(id, button) {
+
+    document.querySelectorAll(".section")
+        .forEach(section => section.classList.remove("active"));
+
+    document.querySelectorAll(".tab")
+        .forEach(tab => tab.classList.remove("active"));
+
+    document.getElementById(id).classList.add("active");
+
+    button.classList.add("active");
+}
+
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+function openExerciseModal() {
+
+    document.getElementById("exerciseNameInput").value = "";
+
+    document.getElementById("exerciseModal")
+        .classList.add("show");
+
+    setTimeout(() => {
+        document.getElementById("exerciseNameInput").focus();
+    }, 100);
+}
+
+
+function openAddTodayModal() {
+
+    if (data.exercises.length === 0) {
+
+        showToast(
+            "Add an exercise to your library first.",
+            "error"
+        );
+
+        openExerciseModal();
+
+        return;
+    }
+
+    const select =
+        document.getElementById("todayExerciseSelect");
+
+    const usedNames = data.today.exercises
+        .map(e => e.name.toLowerCase());
+
+    select.innerHTML = "";
+
+    data.exercises
+        .filter(ex => !usedNames.includes(ex.name.toLowerCase()))
+        .forEach(exercise => {
+
+            const option = document.createElement("option");
+
+            option.value = exercise.id;
+            option.textContent = exercise.name;
+
+            select.appendChild(option);
+        });
+
+
+    if (select.options.length === 0) {
+
+        showToast(
+            "All library exercises are already in today's workout.",
+            "error"
+        );
+
+        return;
+    }
+
+    document.getElementById("todayModal")
+        .classList.add("show");
+}
+
+
+function closeModal(id) {
+
+    document.getElementById(id)
+        .classList.remove("show");
+}
+
+
+function overlayClose(event, id) {
+
+    if (event.target.id === id) {
+        closeModal(id);
+    }
+}
+
+
+/* =========================================================
+   EXERCISE LIBRARY
+========================================================= */
+
+function saveExercise() {
+
+    const input =
+        document.getElementById("exerciseNameInput");
+
+    const name = input.value.trim();
+
+    if (!name) {
+
+        showToast(
+            "Enter an exercise name.",
+            "error"
+        );
+
+        input.focus();
+
+        return;
+    }
+
+
+    const exists = data.exercises.some(
+        exercise =>
+            exercise.name.trim().toLowerCase() === name.toLowerCase()
+    );
+
+
+    if (exists) {
+
+        showToast(
+            "This exercise already exists.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    data.exercises.push({
+        id: crypto.randomUUID(),
+        name: name,
+        createdAt: new Date().toISOString()
+    });
+
+
+    saveData();
+
+    renderLibrary();
+
+    closeModal("exerciseModal");
+
+    showToast(
+        `${name} added to your library.`,
+        "success"
+    );
+}
+
+
+function deleteExercise(id) {
+
+    const exercise =
+        data.exercises.find(e => e.id === id);
+
+    if (!exercise) return;
+
+
+    const confirmed = confirm(
+        `Delete "${exercise.name}" from your exercise library?`
+    );
+
+    if (!confirmed) return;
+
+
+    data.exercises =
+        data.exercises.filter(e => e.id !== id);
+
+    saveData();
+
+    renderLibrary();
+
+    showToast(
+        "Exercise removed.",
+        "success"
+    );
+}
+
+
+/* =========================================================
+   ADD EXERCISE TO TODAY
+========================================================= */
+
+function addExerciseToToday() {
+
+    const select =
+        document.getElementById("todayExerciseSelect");
+
+    const id = select.value;
+
+    const libraryExercise =
+        data.exercises.find(e => e.id === id);
+
+    if (!libraryExercise) return;
+
+
+    const duplicate =
+        data.today.exercises.some(
+            e => e.name.toLowerCase() ===
+                 libraryExercise.name.toLowerCase()
+        );
+
+
+    if (duplicate) {
+
+        showToast(
+            "Exercise is already in today's workout.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    data.today.exercises.push({
+
+        id: crypto.randomUUID(),
+
+        libraryId: libraryExercise.id,
+
+        name: libraryExercise.name,
+
+        completed: false,
+
+        sets: [
+            {
+                id: crypto.randomUUID(),
+                weight: "",
+                reps: "",
+                sets: 1
+            }
+        ]
+
+    });
+
+
+    saveData();
+
+    renderToday();
+
+    closeModal("todayModal");
+
+    showToast(
+        `${libraryExercise.name} added to today's workout.`,
+        "success"
+    );
+}
+
+
+/* =========================================================
+   TODAY RENDER
+========================================================= */
+
+function renderToday() {
+
+    const container =
+        document.getElementById("todayExercises");
+
+    container.innerHTML = "";
+
+
+    if (data.today.exercises.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">✦</div>
+                <strong>No exercises yet</strong>
+                <p>Press + Add Exercise to begin today's session.</p>
+            </div>
+        `;
+
+        updateProgress();
+
+        return;
+    }
+
+
+    data.today.exercises.forEach(
+        (exercise, index) => {
+
+            const card =
+                document.createElement("div");
+
+            card.className = "exercise-card";
+
+            card.innerHTML = `
+
+                <div class="exercise-header">
+
+                    <div class="exercise-name-wrap">
+
+                        <div class="exercise-number">
+                            ${String(index + 1).padStart(2, "0")}
+                        </div>
+
+                        <div>
+                            <div class="exercise-name">
+                                ${escapeHTML(exercise.name)}
+                            </div>
+
+                            <div class="set-count">
+                                ${exercise.sets.length}
+                                ${exercise.sets.length === 1 ? "set" : "sets"}
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="exercise-actions">
+
+                        <button
+                            class="small-btn ${exercise.completed ? "complete" : ""}"
+                            onclick="toggleComplete('${exercise.id}')"
+                        >
+                            ${exercise.completed ? "✓ Done" : "Complete"}
+                        </button>
+
+                        <button
+                            class="small-btn"
+                            onclick="removeTodayExercise('${exercise.id}')"
+                        >
+                            ×
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="sets">
+
+                    <div class="set-table">
+
+                        <div class="set-head">
+                            <span>Set</span>
+                            <span>Weight</span>
+                            <span>Reps</span>
+                            <span>Sets</span>
+                            <span></span>
+                        </div>
+
+                        ${exercise.sets.map(
+                            (set, setIndex) =>
+                                renderSetRow(
+                                    exercise.id,
+                                    set,
+                                    setIndex
+                                )
+                        ).join("")}
+
+                    </div>
+
+
+                    <button
+                        class="add-set"
+                        onclick="addSet('${exercise.id}')"
+                    >
+                        + Add Set
+                    </button>
+
+                </div>
+            `;
+
+
+            container.appendChild(card);
+        }
+    );
+
+
+    updateProgress();
+}
+
+
+function renderSetRow(
+    exerciseId,
+    set,
+    setIndex
+) {
+
+    return `
+
+        <div class="set-row">
+
+            <span>${setIndex + 1}</span>
+
+            <input
+                class="input"
+                type="number"
+                min="0"
+                step="0.5"
+                placeholder="kg"
+                value="${escapeAttribute(set.weight)}"
+                onchange="updateSet('${exerciseId}','${set.id}','weight',this.value)"
+            >
+
+            <input
+                class="input"
+                type="number"
+                min="0"
+                placeholder="reps"
+                value="${escapeAttribute(set.reps)}"
+                onchange="updateSet('${exerciseId}','${set.id}','reps',this.value)"
+            >
+
+            <input
+                class="input"
+                type="number"
+                min="1"
+                placeholder="sets"
+                value="${escapeAttribute(set.sets)}"
+                onchange="updateSet('${exerciseId}','${set.id}','sets',this.value)"
+            >
+
+            <button
+                class="delete-set"
+                onclick="deleteSet('${exerciseId}','${set.id}')"
+                title="Delete set"
+            >
+                ×
+            </button>
+
+        </div>
+    `;
+}
+
+
+/* =========================================================
+   SET MANAGEMENT
+========================================================= */
+
+function addSet(exerciseId) {
+
+    const exercise =
+        data.today.exercises.find(
+            e => e.id === exerciseId
+        );
+
+    if (!exercise) return;
+
+
+    exercise.sets.push({
+
+        id: crypto.randomUUID(),
+
+        weight: "",
+
+        reps: "",
+
+        sets: 1
+
+    });
+
+
+    saveData();
+
+    renderToday();
+}
+
+
+function deleteSet(exerciseId, setId) {
+
+    const exercise =
+        data.today.exercises.find(
+            e => e.id === exerciseId
+        );
+
+    if (!exercise) return;
+
+
+    if (exercise.sets.length === 1) {
+
+        showToast(
+            "An exercise needs at least one set.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    exercise.sets =
+        exercise.sets.filter(
+            set => set.id !== setId
+        );
+
+
+    saveData();
+
+    renderToday();
+}
+
+
+function updateSet(
+    exerciseId,
+    setId,
+    field,
+    value
+) {
+
+    const exercise =
+        data.today.exercises.find(
+            e => e.id === exerciseId
+        );
+
+    if (!exercise) return;
+
+
+    const set =
+        exercise.sets.find(
+            s => s.id === setId
+        );
+
+    if (!set) return;
+
+
+    if (field === "sets") {
+
+        const numeric =
+            parseInt(value, 10);
+
+        set[field] =
+            Number.isFinite(numeric) && numeric > 0
+                ? numeric
+                : 1;
+
+    } else {
+
+        set[field] = value;
+    }
+
+
+    saveData();
+}
+
+
+/* =========================================================
+   COMPLETE / REMOVE
+========================================================= */
+
+function toggleComplete(exerciseId) {
+
+    const exercise =
+        data.today.exercises.find(
+            e => e.id === exerciseId
+        );
+
+    if (!exercise) return;
+
+
+    exercise.completed = !exercise.completed;
+
+    saveData();
+
+    renderToday();
+}
+
+
+function removeTodayExercise(exerciseId) {
+
+    const exercise =
+        data.today.exercises.find(
+            e => e.id === exerciseId
+        );
+
+    if (!exercise) return;
+
+
+    data.today.exercises =
+        data.today.exercises.filter(
+            e => e.id !== exerciseId
+        );
+
+    saveData();
+
+    renderToday();
+
+    showToast(
+        `${exercise.name} removed from today's workout.`,
+        "success"
+    );
+}
+
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+
+function updateProgress() {
+
+    const exercises =
+        data.today.exercises;
+
+    const completed =
+        exercises.filter(
+            e => e.completed
+        ).length;
+
+
+    const percent =
+        exercises.length === 0
+            ? 0
+            : Math.round(
+                completed / exercises.length * 100
+            );
+
+
+    document.getElementById("progressBar")
+        .style.width = percent + "%";
+
+    document.getElementById("progressText")
+        .textContent = percent + "%";
+}
+
+
+/* =========================================================
+   END DAY
+========================================================= */
+
+function endDay() {
+
+    if (data.today.exercises.length === 0) {
+
+        showToast(
+            "Add at least one exercise before ending the day.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const incomplete =
+        data.today.exercises.filter(
+            e => !e.completed
+        );
+
+
+    if (incomplete.length > 0) {
+
+        const proceed = confirm(
+            `${incomplete.length} exercise(s) are not marked complete.\n\nEnd the day anyway?`
+        );
+
+        if (!proceed) return;
+    }
+
+
+    const snapshot = {
+        id: crypto.randomUUID(),
+        date: data.today.date,
+        completedAt: new Date().toISOString(),
+        exercises: JSON.parse(
+            JSON.stringify(data.today.exercises)
+        )
+    };
+
+
+    data.history.unshift(snapshot);
+
+
+    data.today = {
+        date: getDateKey(),
+        exercises: []
+    };
+
+
+    saveData();
+
+    renderEverything();
+
+    showToast(
+        "Training day saved successfully.",
+        "success"
+    );
+}
+
+
+/* =========================================================
+   LIBRARY RENDER
+========================================================= */
+
+function renderLibrary() {
+
+    const container =
+        document.getElementById("libraryGrid");
+
+    container.innerHTML = "";
+
+
+    if (data.exercises.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty" style="grid-column:1/-1">
+                <div class="empty-icon">✦</div>
+                <strong>Your library is empty</strong>
+                <p>Add your first exercise using the + button.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    data.exercises.forEach(exercise => {
+
+        const item =
+            document.createElement("div");
+
+        item.className = "library-item";
+
+        item.innerHTML = `
+
+            <div class="library-item-left">
+
+                <div class="library-dot"></div>
+
+                <div class="library-name">
+                    ${escapeHTML(exercise.name)}
+                </div>
+
+            </div>
+
+            <button
+                class="delete-exercise"
+                onclick="deleteExercise('${exercise.id}')"
+                title="Delete exercise"
+            >
+                ×
+            </button>
+
+        `;
+
+        container.appendChild(item);
+    });
+}
+
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+function renderHistory() {
+
+    const container =
+        document.getElementById("historyList");
+
+    container.innerHTML = "";
+
+
+    if (data.history.length === 0) {
+
+        container.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">◌</div>
+                <strong>No completed workouts</strong>
+                <p>Your finished training sessions will appear here.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    data.history.forEach(workout => {
+
+        const date =
+            new Date(
+                workout.date + "T12:00:00"
+            );
+
+
+        const dateText =
+            date.toLocaleDateString(
+                "en-US",
+                {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                }
+            );
+
+
+        const completed =
+            workout.exercises.filter(
+                e => e.completed
+            ).length;
+
+
+        const card =
+            document.createElement("div");
+
+        card.className = "history-card";
+
+        card.innerHTML = `
+
+            <div class="history-top">
+
+                <div>
+                    <div class="history-date">
+                        ${dateText}
+                    </div>
+
+                    <div class="history-meta">
+                        ${workout.exercises.length}
+                        exercise${workout.exercises.length === 1 ? "" : "s"}
+                        · ${completed} completed
+                    </div>
+                </div>
+
+                <div class="completed-pill">
+                    SAVED
+                </div>
+
+            </div>
+
+
+            <div class="history-exercises">
+
+                ${workout.exercises.map(
+                    e => `
+                        <div class="history-exercise">
+                            ${escapeHTML(e.name)}
+                        </div>
+                    `
+                ).join("")}
+
+            </div>
+
+        `;
+
+
+        container.appendChild(card);
+    });
+
+
+    document.getElementById("totalWorkouts")
+        .textContent = data.history.length;
+}
+
+
+/* =========================================================
+   RENDER EVERYTHING
+========================================================= */
+
+function renderEverything() {
+
+    renderToday();
+
+    renderLibrary();
+
+    renderHistory();
+
+    document.getElementById("totalWorkouts")
+        .textContent = data.history.length;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message, type = "success") {
+
+    const container =
+        document.getElementById("toastContainer");
+
+
+    const toast =
+        document.createElement("div");
+
+    toast.className =
+        `toast ${type}`;
+
+    toast.textContent = message;
+
+    container.appendChild(toast);
+
+
+    setTimeout(() => {
+
+        toast.style.opacity = "0";
+        toast.style.transform = "translateX(15px)";
+
+        setTimeout(
+            () => toast.remove(),
+            250
+        );
+
+    }, 2600);
+}
+
+
+/* =========================================================
+   EXPORT / IMPORT
+========================================================= */
+
+function exportData() {
+
+    const json =
+        JSON.stringify(data, null, 2);
+
+    const blob =
+        new Blob(
+            [json],
+            { type: "application/json" }
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement("a");
+
+    a.href = url;
+
+    a.download =
+        `gym-backup-${getDateKey()}.json`;
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+    showToast(
+        "Workout backup exported.",
+        "success"
+    );
+}
+
+
+function importData(event) {
+
+    const file =
+        event.target.files[0];
+
+    if (!file) return;
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload = function(e) {
+
+        try {
+
+            const imported =
+                JSON.parse(e.target.result);
+
+
+            if (
+                !imported ||
+                !Array.isArray(imported.exercises) ||
+                !Array.isArray(imported.history)
+            ) {
+
+                throw new Error("Invalid backup");
+            }
+
+
+            const replace =
+                confirm(
+                    "Import this backup?\n\nThis will replace your current gym data."
+                );
+
+
+            if (!replace) return;
+
+
+            data = imported;
+
+            ensureToday();
+
+            saveData();
+
+            renderEverything();
+
+            showToast(
+                "Backup imported successfully.",
+                "success"
+            );
+
+        } catch (error) {
+
+            showToast(
+                "Invalid backup file.",
+                "error"
+            );
+        }
+
+    };
+
+
+    reader.readAsText(file);
+
+    event.target.value = "";
+}
+
+
+/* =========================================================
+   SECURITY / HTML HELPERS
+========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+function escapeAttribute(value) {
+
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+}
+
+
+/* =========================================================
+   KEYBOARD SHORTCUT
+========================================================= */
+
+document.addEventListener("keydown", e => {
+
+    if (e.key === "Escape") {
+
+        document.querySelectorAll(".modal-overlay")
+            .forEach(modal => {
+                modal.classList.remove("show");
+            });
+    }
+
+});
+
+
+</script>
+
+</body>
+</html>

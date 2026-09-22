@@ -1,0 +1,4449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>APPROACH — Personal Reminder Vault</title>
+
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root{
+    --bg:#03040b;
+    --bg2:#070817;
+
+    --glass:rgba(255,255,255,.055);
+    --glass2:rgba(255,255,255,.08);
+
+    --border:rgba(255,255,255,.105);
+    --border2:rgba(255,255,255,.16);
+
+    --text:#f6f4ff;
+    --muted:#9694a9;
+
+    --purple:#9c7cff;
+    --purple2:#6b49ff;
+
+    --cyan:#60e5eb;
+    --green:#52e39b;
+    --yellow:#ffd166;
+    --red:#ff5d7a;
+
+    --shadow:0 30px 90px rgba(0,0,0,.5);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+
+    color:var(--text);
+    font-family:Inter,sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 12% 10%,
+            rgba(106,70,255,.18),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 90% 15%,
+            rgba(41,210,255,.09),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(185,42,255,.11),
+            transparent 32%
+        ),
+        linear-gradient(
+            135deg,
+            #02030a,
+            #070818 50%,
+            #02030a
+        );
+
+    overflow-x:hidden;
+}
+
+
+/* =========================================================
+   COSMIC BACKGROUND
+========================================================= */
+
+.cosmos{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:-10;
+    overflow:hidden;
+}
+
+.star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    background:white;
+    border-radius:50%;
+    opacity:.35;
+    animation:twinkle 4s infinite alternate;
+}
+
+@keyframes twinkle{
+    from{
+        opacity:.1;
+        transform:scale(.7);
+    }
+
+    to{
+        opacity:.8;
+        transform:scale(1.3);
+    }
+}
+
+.nebula{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(100px);
+    opacity:.13;
+}
+
+.nebula-a{
+    width:600px;
+    height:600px;
+    background:#7049ff;
+    left:-250px;
+    top:-250px;
+}
+
+.nebula-b{
+    width:500px;
+    height:500px;
+    background:#00d9ff;
+    right:-250px;
+    top:25%;
+}
+
+.nebula-c{
+    width:650px;
+    height:650px;
+    background:#c32aff;
+    left:25%;
+    bottom:-450px;
+}
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+.navbar{
+    width:min(1240px,calc(100% - 36px));
+    height:72px;
+
+    margin:18px auto 0;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 16px 0 22px;
+
+    border-radius:23px;
+
+    background:rgba(7,8,22,.62);
+
+    border:1px solid var(--border);
+
+    backdrop-filter:blur(25px);
+    -webkit-backdrop-filter:blur(25px);
+
+    box-shadow:
+        0 15px 60px rgba(0,0,0,.3);
+
+    position:relative;
+    z-index:20;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.brand-icon{
+    width:39px;
+    height:39px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(156,124,255,.25),
+            rgba(96,229,235,.08)
+        );
+
+    border:1px solid rgba(156,124,255,.3);
+
+    box-shadow:
+        inset 0 0 25px rgba(156,124,255,.08),
+        0 0 30px rgba(126,91,255,.08);
+}
+
+.brand-icon svg{
+    width:21px;
+}
+
+.brand-name{
+    font-family:"Space Grotesk";
+    font-size:18px;
+    font-weight:700;
+    letter-spacing:1.5px;
+}
+
+.brand-sub{
+    color:#77758a;
+    font-size:9px;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    margin-top:2px;
+}
+
+.nav-right{
+    display:flex;
+    gap:9px;
+}
+
+.btn{
+    border:none;
+    cursor:pointer;
+
+    color:white;
+
+    font-family:Inter;
+    font-weight:600;
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    gap:8px;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        border-color .25s ease,
+        background .25s ease;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn-primary{
+    padding:12px 17px;
+
+    border-radius:13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #9677ff,
+            #6846ff
+        );
+
+    box-shadow:
+        0 8px 28px rgba(105,72,255,.25),
+        inset 0 1px rgba(255,255,255,.25);
+}
+
+.btn-primary:hover{
+    box-shadow:
+        0 13px 40px rgba(105,72,255,.4),
+        inset 0 1px rgba(255,255,255,.3);
+}
+
+.btn-ghost{
+    padding:11px 14px;
+
+    border-radius:12px;
+
+    background:rgba(255,255,255,.045);
+
+    border:1px solid var(--border);
+}
+
+.btn-ghost:hover{
+    border-color:rgba(156,124,255,.4);
+    background:rgba(156,124,255,.08);
+}
+
+.plus{
+    font-size:19px;
+    font-weight:400;
+    line-height:0;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.container{
+    width:min(1050px,calc(100% - 36px));
+    margin:auto;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+    min-height:430px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+}
+
+.eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+    padding:8px 13px;
+
+    border-radius:999px;
+
+    color:#bbaeff;
+
+    font-size:10px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+
+    background:rgba(156,124,255,.06);
+
+    border:1px solid rgba(156,124,255,.15);
+
+    margin-bottom:24px;
+}
+
+.eyebrow-dot{
+    width:6px;
+    height:6px;
+
+    background:var(--purple);
+
+    border-radius:50%;
+
+    box-shadow:
+        0 0 12px var(--purple);
+}
+
+.hero h1{
+    font-family:"Space Grotesk";
+
+    font-size:
+        clamp(
+            58px,
+            9vw,
+            110px
+        );
+
+    line-height:.9;
+
+    letter-spacing:-5px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff 10%,
+            #c8beff 42%,
+            #9178ff 68%,
+            #68dfe7 100%
+        );
+
+    -webkit-background-clip:text;
+    background-clip:text;
+
+    color:transparent;
+
+    filter:
+        drop-shadow(
+            0 0 35px
+            rgba(137,104,255,.12)
+        );
+}
+
+.hero p{
+    max-width:570px;
+
+    margin-top:25px;
+
+    color:var(--muted);
+
+    line-height:1.8;
+
+    font-size:14px;
+}
+
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+.dashboard{
+    padding-bottom:100px;
+}
+
+
+/* =========================================================
+   TOP STATS
+========================================================= */
+
+.stats{
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:13px;
+
+    margin-bottom:35px;
+}
+
+.stat{
+    padding:19px;
+
+    border-radius:19px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.065),
+            rgba(255,255,255,.025)
+        );
+
+    border:1px solid var(--border);
+
+    backdrop-filter:blur(20px);
+}
+
+.stat-label{
+    font-size:9px;
+
+    color:#77758a;
+
+    letter-spacing:1.4px;
+
+    text-transform:uppercase;
+}
+
+.stat-value{
+    font-family:"Space Grotesk";
+
+    font-size:27px;
+
+    margin-top:7px;
+
+    font-weight:600;
+}
+
+
+/* =========================================================
+   CONTROL BAR
+========================================================= */
+
+.control-bar{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    margin-bottom:18px;
+}
+
+.tabs{
+    display:flex;
+
+    padding:4px;
+
+    background:rgba(255,255,255,.035);
+
+    border:1px solid var(--border);
+
+    border-radius:13px;
+}
+
+.tab{
+    border:none;
+
+    background:transparent;
+
+    color:#7e7c90;
+
+    padding:9px 15px;
+
+    border-radius:9px;
+
+    cursor:pointer;
+
+    font-size:11px;
+
+    font-weight:600;
+
+    transition:.2s;
+}
+
+.tab.active{
+    color:white;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(142,112,255,.25),
+            rgba(108,74,255,.12)
+        );
+
+    box-shadow:
+        inset 0 1px rgba(255,255,255,.08);
+}
+
+.search{
+    width:250px;
+
+    position:relative;
+}
+
+.search input{
+    width:100%;
+
+    padding:
+        11px
+        13px
+        11px
+        38px;
+
+    border-radius:12px;
+
+    outline:none;
+
+    border:1px solid var(--border);
+
+    background:rgba(255,255,255,.035);
+
+    color:white;
+
+    font-family:Inter;
+
+    font-size:11px;
+}
+
+.search input:focus{
+    border-color:
+        rgba(156,124,255,.45);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(156,124,255,.05);
+}
+
+.search-icon{
+    position:absolute;
+
+    left:13px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#7c7a8d;
+}
+
+
+/* =========================================================
+   APPROACH LIST
+========================================================= */
+
+.approach-list{
+    display:flex;
+
+    flex-direction:column;
+
+    gap:11px;
+}
+
+.approach-card{
+
+    position:relative;
+
+    display:grid;
+
+    grid-template-columns:
+        auto 1fr auto;
+
+    align-items:center;
+
+    gap:16px;
+
+    padding:18px;
+
+    border-radius:20px;
+
+    border:1px solid var(--border);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.065),
+            rgba(255,255,255,.025)
+        );
+
+    backdrop-filter:blur(20px);
+
+    cursor:pointer;
+
+    overflow:hidden;
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease;
+}
+
+.approach-card:hover{
+    transform:translateY(-3px);
+
+    border-color:
+        rgba(156,124,255,.36);
+
+    box-shadow:
+        0 20px 55px rgba(0,0,0,.35);
+}
+
+
+/* priority glow */
+
+.approach-card.urgent{
+    border-color:
+        rgba(255,93,122,.24);
+
+    box-shadow:
+        inset 3px 0 0 rgba(255,93,122,.8),
+        0 10px 50px rgba(255,60,100,.04);
+}
+
+.approach-card.soon{
+    border-color:
+        rgba(255,209,102,.2);
+
+    box-shadow:
+        inset 3px 0 0 rgba(255,209,102,.65);
+}
+
+.approach-card.completed{
+    opacity:.62;
+
+    box-shadow:
+        inset 3px 0 0 rgba(82,227,155,.65);
+}
+
+.approach-card.completed .person-name{
+    text-decoration:
+        line-through;
+
+    text-decoration-color:
+        rgba(82,227,155,.5);
+}
+
+
+/* =========================================================
+   CHECK BUTTON
+========================================================= */
+
+.complete-btn{
+    width:35px;
+    height:35px;
+
+    flex-shrink:0;
+
+    border-radius:11px;
+
+    border:1px solid rgba(255,255,255,.13);
+
+    background:rgba(255,255,255,.035);
+
+    color:#77758a;
+
+    cursor:pointer;
+
+    display:grid;
+    place-items:center;
+
+    transition:.2s;
+}
+
+.complete-btn:hover{
+    border-color:
+        rgba(82,227,155,.5);
+
+    color:var(--green);
+
+    background:
+        rgba(82,227,155,.07);
+}
+
+.completed .complete-btn{
+    color:#07150e;
+
+    background:
+        var(--green);
+
+    border-color:
+        rgba(82,227,155,.5);
+
+    box-shadow:
+        0 0 20px rgba(82,227,155,.18);
+}
+
+
+/* =========================================================
+   PERSON AVATAR
+========================================================= */
+
+.person-avatar{
+    width:54px;
+    height:54px;
+
+    border-radius:16px;
+
+    object-fit:cover;
+
+    border:1px solid
+        rgba(255,255,255,.12);
+
+    background:
+        linear-gradient(
+            135deg,
+            #7559dd,
+            #30235f
+        );
+}
+
+.person-avatar.initials{
+    display:grid;
+    place-items:center;
+
+    color:white;
+
+    font-family:"Space Grotesk";
+
+    font-size:17px;
+
+    font-weight:600;
+}
+
+
+/* =========================================================
+   CARD CONTENT
+========================================================= */
+
+.card-content{
+    min-width:0;
+}
+
+.person-line{
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    flex-wrap:wrap;
+}
+
+.person-name{
+    font-size:14px;
+
+    font-weight:700;
+}
+
+.badge{
+    font-size:8px;
+
+    padding:4px 7px;
+
+    border-radius:999px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.8px;
+
+    font-weight:700;
+}
+
+.badge-urgent{
+    color:#ff91a6;
+
+    background:
+        rgba(255,93,122,.08);
+
+    border:
+        1px solid
+        rgba(255,93,122,.16);
+}
+
+.badge-soon{
+    color:#ffd878;
+
+    background:
+        rgba(255,209,102,.07);
+
+    border:
+        1px solid
+        rgba(255,209,102,.15);
+}
+
+.badge-normal{
+    color:#aaa4c5;
+
+    background:
+        rgba(255,255,255,.045);
+
+    border:
+        1px solid
+        rgba(255,255,255,.08);
+}
+
+.badge-overdue{
+    color:#ff7891;
+
+    background:
+        rgba(255,40,70,.1);
+
+    border:
+        1px solid
+        rgba(255,40,70,.2);
+}
+
+.badge-completed{
+    color:#69e9a6;
+
+    background:
+        rgba(82,227,155,.07);
+
+    border:
+        1px solid
+        rgba(82,227,155,.15);
+}
+
+.reason{
+    margin-top:5px;
+
+    color:#a3a1b2;
+
+    font-size:11px;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+}
+
+.card-meta{
+    display:flex;
+
+    gap:13px;
+
+    margin-top:8px;
+
+    color:#6e6c7e;
+
+    font-size:9px;
+}
+
+.card-meta span{
+    display:flex;
+
+    align-items:center;
+
+    gap:4px;
+}
+
+
+/* =========================================================
+   DEADLINE
+========================================================= */
+
+.deadline{
+    min-width:150px;
+
+    text-align:right;
+}
+
+.deadline-date{
+    font-family:"Space Grotesk";
+
+    font-size:12px;
+
+    font-weight:600;
+
+    color:#dcd9e8;
+}
+
+.countdown{
+    margin-top:5px;
+
+    color:#77758a;
+
+    font-size:9px;
+
+    letter-spacing:.3px;
+}
+
+.countdown.urgent-text{
+    color:#ff8098;
+}
+
+.countdown.soon-text{
+    color:#ffd66f;
+}
+
+.countdown.completed-text{
+    color:#62e3a0;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty{
+    min-height:290px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    border:
+        1px dashed
+        rgba(255,255,255,.12);
+
+    border-radius:23px;
+
+    background:
+        rgba(255,255,255,.018);
+}
+
+.empty-icon{
+    width:59px;
+    height:59px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:19px;
+
+    background:
+        rgba(156,124,255,.07);
+
+    border:
+        1px solid
+        rgba(156,124,255,.15);
+
+    margin-bottom:15px;
+}
+
+.empty h3{
+    font-family:"Space Grotesk";
+
+    font-size:18px;
+}
+
+.empty p{
+    color:var(--muted);
+
+    font-size:11px;
+
+    margin-top:7px;
+
+    max-width:340px;
+
+    line-height:1.6;
+}
+
+
+/* =========================================================
+   FORM MODAL
+========================================================= */
+
+.overlay{
+    position:fixed;
+
+    inset:0;
+
+    z-index:100;
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:18px;
+
+    background:
+        rgba(1,2,8,.74);
+
+    backdrop-filter:blur(18px);
+}
+
+.overlay.active{
+    display:flex;
+}
+
+.modal{
+    width:min(600px,100%);
+
+    max-height:92vh;
+
+    overflow-y:auto;
+
+    border-radius:28px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.13);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(18,18,39,.94),
+            rgba(7,8,21,.96)
+        );
+
+    backdrop-filter:blur(35px);
+
+    box-shadow:
+        0 40px 120px rgba(0,0,0,.65);
+
+    animation:
+        modalIn .3s ease;
+}
+
+@keyframes modalIn{
+    from{
+        opacity:0;
+        transform:
+            translateY(20px)
+            scale(.97);
+    }
+
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+.modal-head{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:22px 23px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.07);
+}
+
+.modal-title{
+    font-family:"Space Grotesk";
+
+    font-size:20px;
+
+    font-weight:600;
+}
+
+.modal-sub{
+    color:#77758a;
+
+    font-size:10px;
+
+    margin-top:4px;
+}
+
+.close{
+    width:37px;
+    height:37px;
+
+    border-radius:11px;
+
+    border:
+        1px solid
+        var(--border);
+
+    background:
+        rgba(255,255,255,.035);
+
+    color:#aaa8b9;
+
+    cursor:pointer;
+
+    font-size:18px;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.form{
+    padding:23px;
+}
+
+.field{
+    margin-bottom:16px;
+
+    position:relative;
+}
+
+.field label{
+    display:block;
+
+    margin:
+        0 0 7px 3px;
+
+    color:#aaa7b8;
+
+    font-size:9px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1.1px;
+}
+
+.field input,
+.field textarea{
+    width:100%;
+
+    border:
+        1px solid
+        rgba(255,255,255,.10);
+
+    background:
+        rgba(255,255,255,.045);
+
+    color:white;
+
+    outline:none;
+
+    border-radius:13px;
+
+    padding:12px 13px;
+
+    font-family:Inter;
+
+    font-size:12px;
+
+    transition:.2s;
+}
+
+.field input:focus,
+.field textarea:focus{
+    border-color:
+        rgba(156,124,255,.5);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(156,124,255,.05);
+}
+
+.field textarea{
+    resize:vertical;
+
+    min-height:78px;
+
+    line-height:1.55;
+}
+
+
+/* PERSON SEARCH */
+
+.person-search-wrap{
+    position:relative;
+}
+
+.person-search-wrap input{
+    padding-right:40px;
+}
+
+.search-person-icon{
+    position:absolute;
+
+    right:13px;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    color:#77758a;
+}
+
+.person-results{
+    position:absolute;
+
+    left:0;
+    right:0;
+
+    top:
+        calc(100% + 7px);
+
+    z-index:50;
+
+    max-height:210px;
+
+    overflow-y:auto;
+
+    border-radius:15px;
+
+    background:
+        rgba(13,14,32,.97);
+
+    border:
+        1px solid
+        rgba(255,255,255,.13);
+
+    box-shadow:
+        0 25px 60px rgba(0,0,0,.5);
+
+    display:none;
+}
+
+.person-results.active{
+    display:block;
+}
+
+.person-option{
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+
+    padding:11px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.person-option:hover{
+    background:
+        rgba(156,124,255,.08);
+}
+
+.option-avatar{
+    width:36px;
+    height:36px;
+
+    border-radius:11px;
+
+    object-fit:cover;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7357df,
+            #30225e
+        );
+}
+
+.option-avatar.initials{
+    display:grid;
+    place-items:center;
+
+    color:white;
+
+    font-size:11px;
+
+    font-family:"Space Grotesk";
+
+    font-weight:600;
+}
+
+.option-name{
+    font-size:11px;
+
+    font-weight:600;
+}
+
+.option-meta{
+    font-size:9px;
+
+    color:#747286;
+
+    margin-top:3px;
+}
+
+
+/* SELECTED PERSON */
+
+.selected-person{
+    display:none;
+
+    align-items:center;
+
+    gap:11px;
+
+    padding:11px;
+
+    border-radius:14px;
+
+    border:
+        1px solid
+        rgba(156,124,255,.2);
+
+    background:
+        rgba(156,124,255,.055);
+
+    margin-top:8px;
+}
+
+.selected-person.active{
+    display:flex;
+}
+
+.selected-avatar{
+    width:42px;
+    height:42px;
+
+    border-radius:13px;
+
+    object-fit:cover;
+}
+
+.selected-info{
+    flex:1;
+}
+
+.selected-name{
+    font-size:12px;
+
+    font-weight:700;
+}
+
+.selected-meta{
+    font-size:9px;
+
+    color:#79778a;
+
+    margin-top:3px;
+}
+
+.change-person{
+    border:none;
+
+    background:transparent;
+
+    color:#9f8aff;
+
+    font-size:9px;
+
+    cursor:pointer;
+}
+
+
+/* DATETIME */
+
+.datetime{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:11px;
+}
+
+
+/* FORM ACTIONS */
+
+.form-actions{
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:9px;
+
+    padding-top:5px;
+}
+
+
+/* =========================================================
+   DETAIL MODAL
+========================================================= */
+
+.detail-modal{
+    width:min(560px,100%);
+}
+
+.detail-header{
+    padding:25px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    border-bottom:
+        1px solid
+        rgba(255,255,255,.07);
+}
+
+.detail-avatar{
+    width:65px;
+    height:65px;
+
+    border-radius:20px;
+
+    object-fit:cover;
+}
+
+.detail-avatar.initials{
+    display:grid;
+    place-items:center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7559dd,
+            #30235f
+        );
+
+    font-family:"Space Grotesk";
+
+    font-weight:600;
+}
+
+.detail-name{
+    font-family:"Space Grotesk";
+
+    font-size:21px;
+
+    font-weight:600;
+}
+
+.detail-meta{
+    color:#7e7c90;
+
+    font-size:10px;
+
+    margin-top:5px;
+}
+
+.detail-body{
+    padding:22px;
+}
+
+.detail-section{
+    padding:15px;
+
+    border-radius:16px;
+
+    background:
+        rgba(255,255,255,.025);
+
+    border:
+        1px solid
+        rgba(255,255,255,.065);
+
+    margin-bottom:10px;
+}
+
+.detail-label{
+    color:#77758a;
+
+    font-size:8px;
+
+    letter-spacing:1.3px;
+
+    text-transform:uppercase;
+}
+
+.detail-value{
+    color:#dedbe8;
+
+    font-size:12px;
+
+    line-height:1.6;
+
+    margin-top:6px;
+
+    white-space:pre-wrap;
+}
+
+.detail-deadline{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.detail-actions{
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:9px;
+
+    margin-top:15px;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast{
+    position:fixed;
+
+    z-index:500;
+
+    right:20px;
+    bottom:20px;
+
+    padding:
+        13px
+        17px;
+
+    border-radius:13px;
+
+    background:
+        rgba(16,17,35,.9);
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    backdrop-filter:blur(20px);
+
+    color:#e8e5f2;
+
+    font-size:11px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.45);
+
+    opacity:0;
+
+    transform:
+        translateY(15px);
+
+    pointer-events:none;
+
+    transition:.3s;
+}
+
+.toast.show{
+    opacity:1;
+
+    transform:none;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:800px){
+
+    .stats{
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+    .control-bar{
+        align-items:stretch;
+
+        flex-direction:column;
+    }
+
+    .search{
+        width:100%;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .navbar{
+        width:
+            calc(100% - 22px);
+
+        margin-top:11px;
+
+        height:64px;
+
+        padding-left:14px;
+    }
+
+    .brand-sub{
+        display:none;
+    }
+
+    .nav-right .btn-ghost{
+        display:none;
+    }
+
+    .container{
+        width:
+            calc(100% - 24px);
+    }
+
+    .hero{
+        min-height:390px;
+    }
+
+    .hero h1{
+        font-size:68px;
+
+        letter-spacing:-4px;
+    }
+
+    .hero p{
+        font-size:12px;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .stat{
+        padding:15px;
+    }
+
+    .stat-value{
+        font-size:22px;
+    }
+
+    .approach-card{
+        grid-template-columns:
+            auto 1fr;
+    }
+
+    .deadline{
+        grid-column:2;
+
+        text-align:left;
+
+        min-width:0;
+
+        margin-top:-4px;
+    }
+
+    .card-meta{
+        flex-wrap:wrap;
+    }
+
+    .datetime{
+        grid-template-columns:1fr;
+    }
+
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+::-webkit-scrollbar{
+    width:7px;
+}
+
+::-webkit-scrollbar-track{
+    background:#050611;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#27253d;
+    border-radius:10px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background:#3a3658;
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =======================================================
+     COSMIC BACKGROUND
+======================================================= -->
+
+<div class="cosmos" id="cosmos">
+
+    <div class="nebula nebula-a"></div>
+    <div class="nebula nebula-b"></div>
+    <div class="nebula nebula-c"></div>
+
+</div>
+
+
+<!-- =======================================================
+     NAVBAR
+======================================================= -->
+
+<nav class="navbar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+            >
+
+                <path
+                    d="M12 3v18M3 12h18"
+                    stroke="#bbaaff"
+                    stroke-width="1.4"
+                    stroke-linecap="round"
+                    opacity=".45"
+                />
+
+                <circle
+                    cx="12"
+                    cy="12"
+                    r="5"
+                    stroke="#9b7cff"
+                    stroke-width="1.5"
+                />
+
+                <circle
+                    cx="12"
+                    cy="12"
+                    r="2"
+                    fill="#60e5eb"
+                />
+
+            </svg>
+
+        </div>
+
+
+        <div>
+
+            <div class="brand-name">
+                APPROACH
+            </div>
+
+            <div class="brand-sub">
+                Personal Reminder Vault
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="nav-right">
+
+        <button
+            class="btn btn-ghost"
+            onclick="goPeople()"
+        >
+            People
+        </button>
+
+
+        <button
+            class="btn btn-primary"
+            onclick="openApproachModal()"
+        >
+
+            <span class="plus">+</span>
+
+            New Approach
+
+        </button>
+
+    </div>
+
+</nav>
+
+
+<!-- =======================================================
+     HERO
+======================================================= -->
+
+<main class="container">
+
+<section class="hero">
+
+    <div class="eyebrow">
+
+        <span class="eyebrow-dot"></span>
+
+        Don't let important moments disappear.
+
+    </div>
+
+
+    <h1>
+        APPROACH
+    </h1>
+
+
+    <p>
+        Remember who you want to reach,
+        why you want to reach them,
+        and when you need to make it happen.
+    </p>
+
+</section>
+
+
+<!-- =======================================================
+     DASHBOARD
+======================================================= -->
+
+<section class="dashboard">
+
+
+    <!-- STATS -->
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div class="stat-label">
+                Pending
+            </div>
+
+            <div
+                class="stat-value"
+                id="pendingCount"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-label">
+                Urgent
+            </div>
+
+            <div
+                class="stat-value"
+                id="urgentCount"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-label">
+                Completed
+            </div>
+
+            <div
+                class="stat-value"
+                id="completedCount"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-label">
+                Total
+            </div>
+
+            <div
+                class="stat-value"
+                id="totalCount"
+            >
+                0
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CONTROLS -->
+
+    <div class="control-bar">
+
+        <div class="tabs">
+
+            <button
+                class="tab active"
+                data-tab="pending"
+                onclick="setTab('pending')"
+            >
+                Pending
+            </button>
+
+            <button
+                class="tab"
+                data-tab="completed"
+                onclick="setTab('completed')"
+            >
+                Completed
+            </button>
+
+            <button
+                class="tab"
+                data-tab="all"
+                onclick="setTab('all')"
+            >
+                All
+            </button>
+
+        </div>
+
+
+        <div class="search">
+
+            <span class="search-icon">
+
+                <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                >
+
+                    <circle
+                        cx="11"
+                        cy="11"
+                        r="6.5"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                    />
+
+                    <path
+                        d="m16 16 5 5"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                        stroke-linecap="round"
+                    />
+
+                </svg>
+
+            </span>
+
+
+            <input
+                id="approachSearch"
+                type="text"
+                placeholder="Search approaches..."
+                oninput="renderApproaches()"
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- LIST -->
+
+    <div
+        class="approach-list"
+        id="approachList"
+    ></div>
+
+
+</section>
+
+</main>
+
+
+<!-- =======================================================
+     ADD APPROACH MODAL
+======================================================= -->
+
+<div
+    class="overlay"
+    id="approachOverlay"
+>
+
+    <div class="modal">
+
+        <div class="modal-head">
+
+            <div>
+
+                <div
+                    class="modal-title"
+                    id="modalTitle"
+                >
+                    New Approach
+                </div>
+
+                <div class="modal-sub">
+                    Create a reminder for someone.
+                </div>
+
+            </div>
+
+
+            <button
+                class="close"
+                onclick="closeApproachModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form
+            class="form"
+            id="approachForm"
+            onsubmit="saveApproach(event)"
+        >
+
+            <input
+                type="hidden"
+                id="editingApproachId"
+            >
+
+
+            <!-- PERSON -->
+
+            <div class="field">
+
+                <label>
+                    Person *
+                </label>
+
+
+                <div class="person-search-wrap">
+
+                    <input
+                        id="personSearch"
+                        type="text"
+                        autocomplete="off"
+                        placeholder="Search registered people..."
+                        oninput="searchPeopleForApproach()"
+                    >
+
+
+                    <span class="search-person-icon">
+
+                        <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                        >
+
+                            <circle
+                                cx="11"
+                                cy="11"
+                                r="6.5"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                            />
+
+                            <path
+                                d="m16 16 5 5"
+                                stroke="currentColor"
+                                stroke-width="1.7"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
+                    </span>
+
+
+                    <div
+                        class="person-results"
+                        id="personResults"
+                    ></div>
+
+                </div>
+
+
+                <div
+                    class="selected-person"
+                    id="selectedPerson"
+                ></div>
+
+            </div>
+
+
+            <!-- REASON -->
+
+            <div class="field">
+
+                <label>
+                    Why do you want to approach them? *
+                </label>
+
+                <textarea
+                    id="approachReason"
+                    required
+                    maxlength="1200"
+                    placeholder="e.g. Need to discuss the project idea / ask about internship / reconnect..."
+                ></textarea>
+
+            </div>
+
+
+            <!-- DEADLINE -->
+
+            <div class="field">
+
+                <label>
+                    Deadline
+                </label>
+
+
+                <div class="datetime">
+
+                    <div>
+
+                        <input
+                            type="date"
+                            id="deadlineDate"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <input
+                            type="time"
+                            id="deadlineTime"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="form-actions">
+
+                <button
+                    type="button"
+                    class="btn btn-ghost"
+                    onclick="closeApproachModal()"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Save Reminder
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     DETAIL MODAL
+======================================================= -->
+
+<div
+    class="overlay"
+    id="detailOverlay"
+>
+
+    <div
+        class="modal detail-modal"
+        id="detailModal"
+    ></div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
+<script>
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+/*
+    IMPORTANT:
+
+    people.html uses:
+        people_vault_v1
+
+    This page reads the exact same key.
+
+    Therefore:
+        people.html -> add person
+        approach.html -> person becomes selectable
+*/
+
+const PEOPLE_KEY = "people_vault_v1";
+
+const APPROACH_KEY = "approach_vault_v1";
+
+
+let people = [];
+
+let approaches = [];
+
+let selectedPersonId = null;
+
+let editingApproachId = null;
+
+let activeTab = "pending";
+
+
+/* =========================================================
+   LOAD DATABASE
+========================================================= */
+
+function loadData(){
+
+    try{
+
+        people =
+            JSON.parse(
+                localStorage.getItem(PEOPLE_KEY) || "[]"
+            );
+
+    }catch{
+
+        people = [];
+
+    }
+
+
+    try{
+
+        approaches =
+            JSON.parse(
+                localStorage.getItem(APPROACH_KEY) || "[]"
+            );
+
+    }catch{
+
+        approaches = [];
+
+    }
+
+}
+
+
+/* =========================================================
+   SAVE APPROACH DATABASE
+========================================================= */
+
+function saveApproaches(){
+
+    localStorage.setItem(
+        APPROACH_KEY,
+        JSON.stringify(approaches)
+    );
+
+}
+
+
+/* =========================================================
+   COSMIC STARS
+========================================================= */
+
+function createStars(){
+
+    const cosmos =
+        document.getElementById("cosmos");
+
+    for(let i=0;i<105;i++){
+
+        const star =
+            document.createElement("div");
+
+        star.className = "star";
+
+        star.style.left =
+            Math.random() * 100 + "%";
+
+        star.style.top =
+            Math.random() * 100 + "%";
+
+        const size =
+            Math.random() * 2 + .7;
+
+        star.style.width =
+            size + "px";
+
+        star.style.height =
+            size + "px";
+
+        star.style.animationDelay =
+            Math.random() * 5 + "s";
+
+        cosmos.appendChild(star);
+
+    }
+
+}
+
+createStars();
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function escapeHTML(value){
+
+    if(value === null || value === undefined){
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+function initials(name){
+
+    if(!name){
+        return "?";
+    }
+
+    return name
+        .trim()
+        .split(/\s+/)
+        .slice(0,2)
+        .map(x => x[0])
+        .join("")
+        .toUpperCase();
+
+}
+
+
+function formatDateTime(dateString){
+
+    if(!dateString){
+        return "—";
+    }
+
+    const d =
+        new Date(dateString);
+
+    if(isNaN(d)){
+        return "—";
+    }
+
+    return d.toLocaleString(
+        "en-IN",
+        {
+            day:"numeric",
+            month:"short",
+            year:"numeric",
+            hour:"numeric",
+            minute:"2-digit"
+        }
+    );
+
+}
+
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent =
+        message;
+
+    toast.classList.add("show");
+
+    clearTimeout(
+        window.toastTimer
+    );
+
+    window.toastTimer =
+        setTimeout(
+            () => {
+                toast.classList.remove("show");
+            },
+            2500
+        );
+
+}
+
+
+/* =========================================================
+   GET PERSON
+========================================================= */
+
+function getPerson(id){
+
+    return people.find(
+        p => p.id === id
+    );
+
+}
+
+
+/* =========================================================
+   PRIORITY ENGINE
+========================================================= */
+
+/*
+    Priority is automatically determined
+    from the deadline.
+
+    <= 24 hours:
+        URGENT
+
+    <= 72 hours:
+        SOON
+
+    > 72 hours:
+        NORMAL
+
+    past:
+        OVERDUE
+*/
+
+function getPriority(approach){
+
+    if(approach.completed){
+
+        return {
+            type:"completed",
+            label:"Completed"
+        };
+
+    }
+
+
+    const deadline =
+        new Date(approach.deadline)
+            .getTime();
+
+    const now =
+        Date.now();
+
+    const diff =
+        deadline - now;
+
+
+    if(diff < 0){
+
+        return {
+            type:"overdue",
+            label:"Overdue"
+        };
+
+    }
+
+
+    const hours =
+        diff / 36e5;
+
+
+    if(hours <= 24){
+
+        return {
+            type:"urgent",
+            label:"Urgent"
+        };
+
+    }
+
+
+    if(hours <= 72){
+
+        return {
+            type:"soon",
+            label:"Soon"
+        };
+
+    }
+
+
+    return {
+        type:"normal",
+        label:"Normal"
+    };
+
+}
+
+
+/* =========================================================
+   COUNTDOWN
+========================================================= */
+
+function getCountdown(approach){
+
+    if(approach.completed){
+
+        return {
+            text:"Completed",
+            className:"completed-text"
+        };
+
+    }
+
+
+    const target =
+        new Date(approach.deadline)
+            .getTime();
+
+    const now =
+        Date.now();
+
+    let diff =
+        target - now;
+
+
+    if(diff < 0){
+
+        diff =
+            Math.abs(diff);
+
+        return {
+            text:
+                "Overdue by " +
+                formatDuration(diff),
+
+            className:
+                "urgent-text"
+        };
+
+    }
+
+
+    return {
+
+        text:
+            formatDuration(diff) +
+            " remaining",
+
+        className:
+            diff <= 86400000
+            ? "urgent-text"
+            : diff <= 259200000
+            ? "soon-text"
+            : ""
+
+    };
+
+}
+
+
+function formatDuration(ms){
+
+    let totalMinutes =
+        Math.floor(
+            ms / 60000
+        );
+
+    const days =
+        Math.floor(
+            totalMinutes / 1440
+        );
+
+    totalMinutes %= 1440;
+
+    const hours =
+        Math.floor(
+            totalMinutes / 60
+        );
+
+    const minutes =
+        totalMinutes % 60;
+
+
+    const parts = [];
+
+    if(days){
+        parts.push(days + "d");
+    }
+
+    if(hours){
+        parts.push(hours + "h");
+    }
+
+    if(minutes || parts.length === 0){
+        parts.push(minutes + "m");
+    }
+
+    return parts.join(" ");
+
+}
+
+
+/* =========================================================
+   OPEN MODAL
+========================================================= */
+
+function openApproachModal(id = null){
+
+    loadData();
+
+    editingApproachId =
+        id;
+
+    const overlay =
+        document.getElementById(
+            "approachOverlay"
+        );
+
+    overlay.classList.add("active");
+
+
+    document.getElementById(
+        "approachForm"
+    ).reset();
+
+
+    document.getElementById(
+        "personResults"
+    ).classList.remove("active");
+
+
+    document.getElementById(
+        "selectedPerson"
+    ).classList.remove("active");
+
+
+    selectedPersonId = null;
+
+
+    if(id){
+
+        const approach =
+            approaches.find(
+                a => a.id === id
+            );
+
+        if(!approach){
+            return;
+        }
+
+
+        document.getElementById(
+            "modalTitle"
+        ).textContent =
+            "Edit Approach";
+
+
+        document.getElementById(
+            "editingApproachId"
+        ).value =
+            approach.id;
+
+
+        const person =
+            getPerson(
+                approach.personId
+            );
+
+
+        if(person){
+
+            selectPerson(
+                person.id
+            );
+
+        }
+
+
+        document.getElementById(
+            "approachReason"
+        ).value =
+            approach.reason || "";
+
+
+        const d =
+            new Date(
+                approach.deadline
+            );
+
+
+        document.getElementById(
+            "deadlineDate"
+        ).value =
+            formatDateInput(d);
+
+
+        document.getElementById(
+            "deadlineTime"
+        ).value =
+            formatTimeInput(d);
+
+
+    }else{
+
+        document.getElementById(
+            "modalTitle"
+        ).textContent =
+            "New Approach";
+
+
+        document.getElementById(
+            "editingApproachId"
+        ).value =
+            "";
+
+
+        /*
+            Default deadline:
+            tomorrow, same current time.
+        */
+
+        const tomorrow =
+            new Date(
+                Date.now() +
+                86400000
+            );
+
+        document.getElementById(
+            "deadlineDate"
+        ).value =
+            formatDateInput(tomorrow);
+
+        document.getElementById(
+            "deadlineTime"
+        ).value =
+            formatTimeInput(tomorrow);
+
+    }
+
+
+    setTimeout(
+        () => {
+            document
+                .getElementById(
+                    "personSearch"
+                )
+                .focus();
+        },
+        100
+    );
+
+}
+
+
+function closeApproachModal(){
+
+    document.getElementById(
+        "approachOverlay"
+    ).classList.remove("active");
+
+    editingApproachId = null;
+
+}
+
+
+/* =========================================================
+   DATE INPUT HELPERS
+========================================================= */
+
+function formatDateInput(date){
+
+    const y =
+        date.getFullYear();
+
+    const m =
+        String(
+            date.getMonth() + 1
+        ).padStart(2,"0");
+
+    const d =
+        String(
+            date.getDate()
+        ).padStart(2,"0");
+
+    return `${y}-${m}-${d}`;
+
+}
+
+
+function formatTimeInput(date){
+
+    return (
+        String(
+            date.getHours()
+        ).padStart(2,"0")
+        +
+        ":" +
+        String(
+            date.getMinutes()
+        ).padStart(2,"0")
+    );
+
+}
+
+
+/* =========================================================
+   PERSON SEARCH
+========================================================= */
+
+function searchPeopleForApproach(){
+
+    const input =
+        document.getElementById(
+            "personSearch"
+        );
+
+    const query =
+        input.value
+            .trim()
+            .toLowerCase();
+
+
+    const results =
+        document.getElementById(
+            "personResults"
+        );
+
+
+    if(!query){
+
+        results.classList.remove(
+            "active"
+        );
+
+        return;
+
+    }
+
+
+    const matches =
+        people.filter(person => {
+
+            const text = [
+
+                person.name,
+                person.college,
+                person.branch,
+                person.year
+
+            ]
+            .join(" ")
+            .toLowerCase();
+
+            return text.includes(query);
+
+        }).slice(0,10);
+
+
+    if(matches.length === 0){
+
+        results.innerHTML = `
+
+            <div
+                style="
+                    padding:16px;
+                    color:#77758a;
+                    font-size:10px;
+                "
+            >
+                No registered person found.
+                Add them first in People.
+            </div>
+
+        `;
+
+        results.classList.add(
+            "active"
+        );
+
+        return;
+
+    }
+
+
+    results.innerHTML =
+        matches.map(
+            person => {
+
+                const avatar =
+                    person.image
+                    ? `
+                        <img
+                            class="option-avatar"
+                            src="${person.image}"
+                            alt=""
+                        >
+                      `
+                    : `
+                        <div
+                            class="
+                                option-avatar
+                                initials
+                            "
+                        >
+                            ${escapeHTML(
+                                initials(
+                                    person.name
+                                )
+                            )}
+                        </div>
+                      `;
+
+
+                const meta = [
+
+                    person.college,
+                    person.year,
+                    person.branch
+
+                ]
+                .filter(Boolean)
+                .map(escapeHTML)
+                .join(" · ");
+
+
+                return `
+
+                    <div
+                        class="person-option"
+                        onclick="
+                            selectPerson('${person.id}')
+                        "
+                    >
+
+                        ${avatar}
+
+                        <div>
+
+                            <div class="option-name">
+                                ${escapeHTML(
+                                    person.name
+                                )}
+                            </div>
+
+                            <div class="option-meta">
+                                ${meta || "No details added"}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+        ).join("");
+
+
+    results.classList.add(
+        "active"
+    );
+
+}
+
+
+/* =========================================================
+   SELECT PERSON
+========================================================= */
+
+function selectPerson(id){
+
+    const person =
+        getPerson(id);
+
+    if(!person){
+        return;
+    }
+
+
+    selectedPersonId =
+        id;
+
+
+    const input =
+        document.getElementById(
+            "personSearch"
+        );
+
+    input.value =
+        person.name;
+
+
+    document
+        .getElementById(
+            "personResults"
+        )
+        .classList.remove(
+            "active"
+        );
+
+
+    const selected =
+        document.getElementById(
+            "selectedPerson"
+        );
+
+
+    const avatar =
+        person.image
+        ? `
+            <img
+                class="selected-avatar"
+                src="${person.image}"
+                alt=""
+            >
+          `
+        : `
+            <div
+                class="
+                    selected-avatar
+                    option-avatar
+                    initials
+                "
+            >
+                ${escapeHTML(
+                    initials(
+                        person.name
+                    )
+                )}
+            </div>
+          `;
+
+
+    const meta = [
+
+        person.college,
+        person.year,
+        person.branch
+
+    ]
+    .filter(Boolean)
+    .map(escapeHTML)
+    .join(" · ");
+
+
+    selected.innerHTML = `
+
+        ${avatar}
+
+        <div class="selected-info">
+
+            <div class="selected-name">
+                ${escapeHTML(
+                    person.name
+                )}
+            </div>
+
+            <div class="selected-meta">
+                ${meta || "No academic details"}
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="change-person"
+            onclick="changePerson()"
+        >
+            Change
+        </button>
+
+    `;
+
+
+    selected.classList.add(
+        "active"
+    );
+
+}
+
+
+function changePerson(){
+
+    selectedPersonId = null;
+
+    document.getElementById(
+        "selectedPerson"
+    ).classList.remove(
+        "active"
+    );
+
+    document.getElementById(
+        "personSearch"
+    ).value = "";
+
+    document.getElementById(
+        "personSearch"
+    ).focus();
+
+}
+
+
+/* =========================================================
+   SAVE APPROACH
+========================================================= */
+
+function saveApproach(event){
+
+    event.preventDefault();
+
+
+    if(!selectedPersonId){
+
+        showToast(
+            "Please select a registered person."
+        );
+
+        return;
+
+    }
+
+
+    const reason =
+        document.getElementById(
+            "approachReason"
+        ).value.trim();
+
+
+    const date =
+        document.getElementById(
+            "deadlineDate"
+        ).value;
+
+
+    const time =
+        document.getElementById(
+            "deadlineTime"
+        ).value;
+
+
+    if(!reason){
+
+        showToast(
+            "Please enter the reason."
+        );
+
+        return;
+
+    }
+
+
+    if(!date || !time){
+
+        showToast(
+            "Please set a deadline."
+        );
+
+        return;
+
+    }
+
+
+    const deadline =
+        new Date(
+            `${date}T${time}`
+        );
+
+
+    if(
+        isNaN(
+            deadline.getTime()
+        )
+    ){
+
+        showToast(
+            "Invalid deadline."
+        );
+
+        return;
+
+    }
+
+
+    /*
+        Prevent creating an exact duplicate.
+    */
+
+    const duplicate =
+        approaches.find(a => {
+
+            if(
+                editingApproachId &&
+                a.id === editingApproachId
+            ){
+                return false;
+            }
+
+            return (
+                a.personId === selectedPersonId &&
+                a.reason.trim().toLowerCase()
+                    === reason.toLowerCase() &&
+                a.deadline ===
+                    deadline.toISOString()
+            );
+
+        });
+
+
+    if(duplicate){
+
+        showToast(
+            "This approach reminder already exists."
+        );
+
+        return;
+
+    }
+
+
+    if(editingApproachId){
+
+        const index =
+            approaches.findIndex(
+                a =>
+                    a.id ===
+                    editingApproachId
+            );
+
+
+        if(index !== -1){
+
+            approaches[index] = {
+
+                ...approaches[index],
+
+                personId:
+                    selectedPersonId,
+
+                reason,
+
+                deadline:
+                    deadline.toISOString(),
+
+                updatedAt:
+                    Date.now()
+
+            };
+
+            showToast(
+                "Approach updated."
+            );
+
+        }
+
+    }else{
+
+        approaches.push({
+
+            id:
+                crypto.randomUUID
+                ? crypto.randomUUID()
+                : Date.now().toString(),
+
+            personId:
+                selectedPersonId,
+
+            reason,
+
+            deadline:
+                deadline.toISOString(),
+
+            completed:false,
+
+            createdAt:
+                Date.now(),
+
+            updatedAt:
+                Date.now()
+
+        });
+
+        showToast(
+            "Approach reminder created."
+        );
+
+    }
+
+
+    saveApproaches();
+
+    closeApproachModal();
+
+    renderApproaches();
+
+    updateStats();
+
+}
+
+
+/* =========================================================
+   COMPLETE
+========================================================= */
+
+function toggleComplete(id){
+
+    const approach =
+        approaches.find(
+            a => a.id === id
+        );
+
+    if(!approach){
+        return;
+    }
+
+
+    approach.completed =
+        !approach.completed;
+
+
+    approach.updatedAt =
+        Date.now();
+
+
+    if(approach.completed){
+
+        approach.completedAt =
+            Date.now();
+
+        showToast(
+            "Completed ✓"
+        );
+
+    }else{
+
+        approach.completedAt =
+            null;
+
+        showToast(
+            "Moved back to pending."
+        );
+
+    }
+
+
+    saveApproaches();
+
+    renderApproaches();
+
+    updateStats();
+
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+function deleteApproach(id){
+
+    const approach =
+        approaches.find(
+            a => a.id === id
+        );
+
+    if(!approach){
+        return;
+    }
+
+
+    const person =
+        getPerson(
+            approach.personId
+        );
+
+
+    const confirmed =
+        confirm(
+            `Delete approach reminder for ${
+                person
+                ? person.name
+                : "this person"
+            }?`
+        );
+
+
+    if(!confirmed){
+        return;
+    }
+
+
+    approaches =
+        approaches.filter(
+            a => a.id !== id
+        );
+
+
+    saveApproaches();
+
+    closeDetail();
+
+    renderApproaches();
+
+    updateStats();
+
+    showToast(
+        "Approach deleted."
+    );
+
+}
+
+
+/* =========================================================
+   TAB
+========================================================= */
+
+function setTab(tab){
+
+    activeTab =
+        tab;
+
+
+    document
+        .querySelectorAll(".tab")
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.tab === tab
+            );
+
+        });
+
+
+    renderApproaches();
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function renderApproaches(){
+
+    const list =
+        document.getElementById(
+            "approachList"
+        );
+
+
+    const query =
+        document.getElementById(
+            "approachSearch"
+        ).value
+        .trim()
+        .toLowerCase();
+
+
+    let visible =
+        approaches.filter(
+            approach => {
+
+                const person =
+                    getPerson(
+                        approach.personId
+                    );
+
+
+                const searchText = [
+
+                    person
+                    ? person.name
+                    : "",
+
+                    approach.reason
+
+                ]
+                .join(" ")
+                .toLowerCase();
+
+
+                const matchesSearch =
+                    searchText.includes(
+                        query
+                    );
+
+
+                if(
+                    activeTab === "pending"
+                ){
+
+                    return (
+                        !approach.completed &&
+                        matchesSearch
+                    );
+
+                }
+
+
+                if(
+                    activeTab === "completed"
+                ){
+
+                    return (
+                        approach.completed &&
+                        matchesSearch
+                    );
+
+                }
+
+
+                return matchesSearch;
+
+            }
+        );
+
+
+    /*
+        SMART SORTING
+
+        Pending:
+            1. Overdue
+            2. Urgent
+            3. Soon
+            4. Normal
+
+        Completed:
+            Most recently completed first
+
+        All:
+            Same priority logic
+    */
+
+    visible.sort(
+        (a,b) => {
+
+            if(
+                activeTab === "completed"
+            ){
+
+                return (
+                    (b.completedAt || 0) -
+                    (a.completedAt || 0)
+                );
+
+            }
+
+
+            const pa =
+                getPriority(a);
+
+            const pb =
+                getPriority(b);
+
+
+            const rank = {
+
+                overdue:0,
+                urgent:1,
+                soon:2,
+                normal:3,
+                completed:4
+
+            };
+
+
+            const priorityDifference =
+                rank[pa.type] -
+                rank[pb.type];
+
+
+            if(
+                priorityDifference !== 0
+            ){
+
+                return priorityDifference;
+
+            }
+
+
+            return (
+                new Date(a.deadline) -
+                new Date(b.deadline)
+            );
+
+        }
+    );
+
+
+    if(visible.length === 0){
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+
+                    <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                    >
+
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="8"
+                            stroke="#9d83ff"
+                            stroke-width="1.4"
+                        />
+
+                        <path
+                            d="M8.5 12.3l2.2 2.2 4.8-5"
+                            stroke="#60e5eb"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                </div>
+
+
+                <h3>
+                    ${
+                        activeTab === "pending"
+                        ? "Nothing pending"
+                        : activeTab === "completed"
+                        ? "No completed approaches"
+                        : "Your approach vault is empty"
+                    }
+                </h3>
+
+
+                <p>
+                    ${
+                        activeTab === "pending"
+                        ? "You're clear for now. Add a new approach whenever you need to remember something important."
+                        : "Completed approaches will appear here."
+                    }
+                </p>
+
+
+                ${
+                    activeTab !== "completed"
+                    ? `
+                        <button
+                            class="btn btn-primary"
+                            onclick="openApproachModal()"
+                        >
+                            <span class="plus">+</span>
+                            New Approach
+                        </button>
+                    `
+                    : ""
+                }
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML =
+        visible
+            .map(
+                renderApproachCard
+            )
+            .join("");
+
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+function renderApproachCard(approach){
+
+    const person =
+        getPerson(
+            approach.personId
+        );
+
+
+    const priority =
+        getPriority(
+            approach
+        );
+
+
+    const countdown =
+        getCountdown(
+            approach
+        );
+
+
+    let avatar;
+
+
+    if(person && person.image){
+
+        avatar = `
+
+            <img
+                class="person-avatar"
+                src="${person.image}"
+                alt=""
+            >
+
+        `;
+
+    }else{
+
+        avatar = `
+
+            <div
+                class="
+                    person-avatar
+                    initials
+                "
+            >
+                ${escapeHTML(
+                    initials(
+                        person
+                        ? person.name
+                        : "?"
+                    )
+                )}
+            </div>
+
+        `;
+
+    }
+
+
+    const collegeMeta =
+        person
+        ? [
+
+            person.college,
+            person.year
+
+        ]
+        .filter(Boolean)
+        .map(escapeHTML)
+        .join(" · ")
+        : "Person not found";
+
+
+    return `
+
+        <div
+            class="
+                approach-card
+                ${priority.type}
+            "
+            onclick="
+                openDetail('${approach.id}')
+            "
+        >
+
+
+            <button
+                class="complete-btn"
+                onclick="
+                    event.stopPropagation();
+                    toggleComplete('${approach.id}')
+                "
+                title="${
+                    approach.completed
+                    ? "Mark pending"
+                    : "Mark completed"
+                }"
+            >
+
+                ${
+                    approach.completed
+
+                    ?
+
+                    `
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                        >
+
+                            <path
+                                d="M5 12.5l4 4L19 7"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+
+                        </svg>
+                    `
+
+                    :
+
+                    `
+                        <svg
+                            width="15"
+                            height="15"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                        >
+
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="8"
+                                stroke="currentColor"
+                                stroke-width="1.4"
+                            />
+
+                        </svg>
+                    `
+                }
+
+            </button>
+
+
+            ${avatar}
+
+
+            <div class="card-content">
+
+                <div class="person-line">
+
+                    <div class="person-name">
+
+                        ${escapeHTML(
+                            person
+                            ? person.name
+                            : "Unknown Person"
+                        )}
+
+                    </div>
+
+
+                    <span
+                        class="
+                            badge
+                            badge-${priority.type}
+                        "
+                    >
+                        ${priority.label}
+                    </span>
+
+                </div>
+
+
+                <div class="reason">
+
+                    ${escapeHTML(
+                        approach.reason
+                    )}
+
+                </div>
+
+
+                <div class="card-meta">
+
+                    <span>
+
+                        <svg
+                            width="10"
+                            height="10"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                        >
+
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="8"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                            />
+
+                            <path
+                                d="M12 7v5l3 2"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                            />
+
+                        </svg>
+
+                        ${collegeMeta || "—"}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="deadline">
+
+                <div class="deadline-date">
+
+                    ${formatDateTime(
+                        approach.deadline
+                    )}
+
+                </div>
+
+
+                <div
+                    class="
+                        countdown
+                        ${countdown.className}
+                    "
+                >
+
+                    ${countdown.text}
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   DETAIL
+========================================================= */
+
+function openDetail(id){
+
+    const approach =
+        approaches.find(
+            a => a.id === id
+        );
+
+
+    if(!approach){
+        return;
+    }
+
+
+    const person =
+        getPerson(
+            approach.personId
+        );
+
+
+    const priority =
+        getPriority(
+            approach
+        );
+
+
+    const countdown =
+        getCountdown(
+            approach
+        );
+
+
+    let avatar;
+
+
+    if(person && person.image){
+
+        avatar = `
+
+            <img
+                class="detail-avatar"
+                src="${person.image}"
+                alt=""
+            >
+
+        `;
+
+    }else{
+
+        avatar = `
+
+            <div
+                class="
+                    detail-avatar
+                    initials
+                "
+            >
+                ${escapeHTML(
+                    initials(
+                        person
+                        ? person.name
+                        : "?"
+                    )
+                )}
+            </div>
+
+        `;
+
+    }
+
+
+    document.getElementById(
+        "detailModal"
+    ).innerHTML = `
+
+        <div class="detail-header">
+
+            ${avatar}
+
+
+            <div>
+
+                <div class="detail-name">
+
+                    ${escapeHTML(
+                        person
+                        ? person.name
+                        : "Unknown Person"
+                    )}
+
+                </div>
+
+
+                <div class="detail-meta">
+
+                    ${escapeHTML(
+                        person
+                        ? [
+                            person.college,
+                            person.year,
+                            person.branch
+                        ]
+                        .filter(Boolean)
+                        .join(" · ")
+                        : "Person not found"
+                    )}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="detail-body">
+
+
+            <div class="detail-section">
+
+                <div class="detail-label">
+                    Status
+                </div>
+
+                <div class="detail-value">
+
+                    ${priority.label}
+
+                </div>
+
+            </div>
+
+
+            <div class="detail-section">
+
+                <div class="detail-label">
+                    Reason for Approach
+                </div>
+
+                <div class="detail-value">
+
+                    ${escapeHTML(
+                        approach.reason
+                    )}
+
+                </div>
+
+            </div>
+
+
+            <div class="detail-section">
+
+                <div class="detail-label">
+                    Deadline
+                </div>
+
+
+                <div
+                    class="detail-deadline"
+                >
+
+                    <div
+                        class="detail-value"
+                    >
+
+                        ${formatDateTime(
+                            approach.deadline
+                        )}
+
+                    </div>
+
+
+                    <div
+                        class="
+                            countdown
+                            ${countdown.className}
+                        "
+                    >
+
+                        ${countdown.text}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="detail-actions">
+
+                <button
+                    class="btn btn-ghost"
+                    onclick="
+                        deleteApproach('${approach.id}')
+                    "
+                >
+                    Delete
+                </button>
+
+
+                <button
+                    class="btn btn-ghost"
+                    onclick="
+                        closeDetail();
+                        openApproachModal('${approach.id}')
+                    "
+                >
+                    Edit
+                </button>
+
+
+                <button
+                    class="btn btn-primary"
+                    onclick="
+                        toggleComplete('${approach.id}');
+                        closeDetail();
+                    "
+                >
+
+                    ${
+                        approach.completed
+                        ? "Mark Pending"
+                        : "Complete ✓"
+                    }
+
+                </button>
+
+            </div>
+
+
+        </div>
+
+    `;
+
+
+    document.getElementById(
+        "detailOverlay"
+    ).classList.add("active");
+
+}
+
+
+function closeDetail(){
+
+    document.getElementById(
+        "detailOverlay"
+    ).classList.remove("active");
+
+}
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function updateStats(){
+
+    const pending =
+        approaches.filter(
+            a => !a.completed
+        ).length;
+
+
+    const completed =
+        approaches.filter(
+            a => a.completed
+        ).length;
+
+
+    const urgent =
+        approaches.filter(
+            a => {
+
+                const p =
+                    getPriority(a);
+
+                return (
+                    p.type === "urgent" ||
+                    p.type === "overdue"
+                );
+
+            }
+        ).length;
+
+
+    document.getElementById(
+        "pendingCount"
+    ).textContent =
+        pending;
+
+
+    document.getElementById(
+        "urgentCount"
+    ).textContent =
+        urgent;
+
+
+    document.getElementById(
+        "completedCount"
+    ).textContent =
+        completed;
+
+
+    document.getElementById(
+        "totalCount"
+    ).textContent =
+        approaches.length;
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function goPeople(){
+
+    /*
+        Both files are expected
+        to be in the same folder.
+    */
+
+    window.location.href =
+        "people.html";
+
+}
+
+
+/* =========================================================
+   OUTSIDE CLICK
+========================================================= */
+
+document
+    .getElementById(
+        "approachOverlay"
+    )
+    .addEventListener(
+        "click",
+        function(event){
+
+            if(
+                event.target === this
+            ){
+
+                closeApproachModal();
+
+            }
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "detailOverlay"
+    )
+    .addEventListener(
+        "click",
+        function(event){
+
+            if(
+                event.target === this
+            ){
+
+                closeDetail();
+
+            }
+
+        }
+    );
+
+
+document.addEventListener(
+    "click",
+    function(event){
+
+        const wrap =
+            document.querySelector(
+                ".person-search-wrap"
+            );
+
+
+        if(
+            wrap &&
+            !wrap.contains(
+                event.target
+            )
+        ){
+
+            document
+                .getElementById(
+                    "personResults"
+                )
+                .classList.remove(
+                    "active"
+                );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   ESCAPE
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.key === "Escape"
+        ){
+
+            closeApproachModal();
+
+            closeDetail();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   LIVE COUNTDOWN
+========================================================= */
+
+setInterval(
+    function(){
+
+        renderApproaches();
+
+        updateStats();
+
+    },
+    30000
+);
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+loadData();
+
+renderApproaches();
+
+updateStats();
+
+</script>
+
+</body>
+</html>

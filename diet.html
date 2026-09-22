@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Diet — Daily Nutrition</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg: #05070b;
+    --card: rgba(15, 19, 27, .78);
+    --card2: rgba(255,255,255,.035);
+    --border: rgba(255,255,255,.085);
+
+    --text: #f5f7fa;
+    --muted: #9299a8;
+    --dim: #626978;
+
+    --purple: #9b7cff;
+    --cyan: #63ddff;
+    --green: #5be6a8;
+    --red: #ff7187;
+    --orange: #ffbd72;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    color: var(--text);
+    font-family: Inter, sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(125, 87, 255, .14),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 85% 75%,
+            rgba(61, 212, 255, .07),
+            transparent 30%
+        ),
+        #05070b;
+}
+
+/* Cosmic stars */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: .3;
+    z-index: -1;
+
+    background-image:
+        radial-gradient(1px 1px at 8% 18%, white, transparent),
+        radial-gradient(1px 1px at 18% 72%, white, transparent),
+        radial-gradient(1px 1px at 32% 35%, white, transparent),
+        radial-gradient(1px 1px at 52% 12%, white, transparent),
+        radial-gradient(1px 1px at 68% 80%, white, transparent),
+        radial-gradient(1px 1px at 84% 25%, white, transparent),
+        radial-gradient(1px 1px at 94% 67%, white, transparent);
+
+    background-size: 300px 300px;
+}
+
+.container {
+    width: min(760px, calc(100% - 28px));
+    margin: auto;
+    padding: 35px 0 70px;
+}
+
+/* Header */
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.brand-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 15px;
+
+    display: grid;
+    place-items: center;
+
+    font-size: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(155,124,255,.18),
+            rgba(99,221,255,.06)
+        );
+
+    border: 1px solid rgba(155,124,255,.22);
+
+    box-shadow:
+        0 0 28px rgba(155,124,255,.12);
+}
+
+.brand h1 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+}
+
+.brand p {
+    color: var(--dim);
+    font-size: 9px;
+    letter-spacing: 2px;
+    margin-top: 3px;
+}
+
+/* Add button */
+
+.add-btn {
+    width: 45px;
+    height: 45px;
+
+    border: 0;
+    border-radius: 14px;
+
+    color: white;
+
+    font-size: 25px;
+    font-weight: 300;
+
+    cursor: pointer;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--purple),
+            #7355ff
+        );
+
+    box-shadow:
+        0 8px 25px rgba(118,87,255,.25);
+
+    transition: .22s;
+}
+
+.add-btn:hover {
+    transform: translateY(-2px) rotate(90deg);
+    box-shadow:
+        0 12px 32px rgba(118,87,255,.38);
+}
+
+/* Hero */
+
+.hero {
+    padding: 27px;
+    border: 1px solid var(--border);
+    border-radius: 25px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(20,24,35,.86),
+            rgba(9,11,17,.76)
+        );
+
+    backdrop-filter: blur(20px);
+
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.38);
+
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+
+    width: 250px;
+    height: 250px;
+
+    right: -110px;
+    top: -130px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(155,124,255,.22),
+            transparent 68%
+        );
+}
+
+.eyebrow {
+    color: var(--purple);
+    font-size: 10px;
+    letter-spacing: 3px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.hero h2 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 35px;
+    letter-spacing: -1.4px;
+    margin-top: 9px;
+}
+
+.hero h2 span {
+    background:
+        linear-gradient(
+            90deg,
+            #fff,
+            #a992ff,
+            #69e0ff
+        );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.hero-date {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 9px;
+}
+
+/* Today's section */
+
+.today-section {
+    margin-top: 24px;
+}
+
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 13px;
+}
+
+.section-title h3 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 19px;
+}
+
+.section-title p {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+/* Diet list */
+
+.diet-list {
+    display: grid;
+    gap: 10px;
+}
+
+.diet-card {
+    display: grid;
+    grid-template-columns: 75px 1fr auto;
+    align-items: center;
+    gap: 15px;
+
+    padding: 16px;
+
+    border: 1px solid var(--border);
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(17,21,30,.78),
+            rgba(10,12,18,.7)
+        );
+
+    transition: .22s;
+
+    animation: appear .3s ease;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(7px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.diet-card:hover {
+    border-color: rgba(155,124,255,.25);
+    transform: translateY(-1px);
+}
+
+/* Time */
+
+.diet-time {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--purple);
+}
+
+.diet-time-period {
+    color: var(--dim);
+    font-size: 9px;
+    margin-top: 3px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Food */
+
+.food-name {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.food-quantity {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+.delete-btn {
+    width: 30px;
+    height: 30px;
+
+    border: 1px solid transparent;
+    border-radius: 9px;
+
+    background: transparent;
+    color: var(--dim);
+
+    cursor: pointer;
+
+    font-size: 17px;
+
+    transition: .2s;
+}
+
+.delete-btn:hover {
+    color: var(--red);
+    border-color: rgba(255,113,135,.18);
+    background: rgba(255,113,135,.05);
+}
+
+/* Empty */
+
+.empty {
+    padding: 55px 20px;
+    text-align: center;
+
+    border: 1px dashed var(--border);
+    border-radius: 19px;
+
+    background: rgba(255,255,255,.015);
+}
+
+.empty-icon {
+    font-size: 30px;
+    opacity: .5;
+    margin-bottom: 10px;
+}
+
+.empty strong {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.empty p {
+    color: var(--dim);
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+/* Modal */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 18px;
+
+    background: rgba(0,0,0,.72);
+
+    backdrop-filter: blur(12px);
+
+    z-index: 100;
+}
+
+.overlay.show {
+    display: flex;
+}
+
+.modal {
+    width: min(430px, 100%);
+
+    padding: 25px;
+
+    border-radius: 23px;
+
+    border: 1px solid rgba(255,255,255,.1);
+
+    background:
+        radial-gradient(
+            circle at 90% 0%,
+            rgba(155,124,255,.15),
+            transparent 35%
+        ),
+        #0d1018;
+
+    box-shadow:
+        0 35px 100px rgba(0,0,0,.7);
+
+    animation: modalIn .22s ease;
+}
+
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 22px;
+}
+
+.modal-header h3 {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 20px;
+}
+
+.close {
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+
+    font-size: 22px;
+
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+label {
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.3px;
+
+    margin-bottom: 7px;
+}
+
+.input {
+    width: 100%;
+
+    padding: 13px;
+
+    border-radius: 12px;
+
+    border: 1px solid var(--border);
+
+    outline: none;
+
+    background: rgba(255,255,255,.035);
+
+    color: white;
+
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+
+    transition: .2s;
+}
+
+.input:focus {
+    border-color: rgba(155,124,255,.55);
+
+    box-shadow:
+        0 0 0 4px rgba(155,124,255,.06);
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: .65;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 9px;
+    margin-top: 22px;
+}
+
+.cancel-btn,
+.save-btn {
+    flex: 1;
+
+    padding: 12px;
+
+    border-radius: 11px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.cancel-btn {
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.035);
+    color: var(--muted);
+}
+
+.save-btn {
+    border: 0;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7657ff,
+            #a07cff
+        );
+
+    box-shadow:
+        0 8px 25px rgba(118,87,255,.2);
+}
+
+/* Toast */
+
+.toast {
+    position: fixed;
+
+    bottom: 22px;
+    right: 22px;
+
+    padding: 13px 16px;
+
+    border-radius: 12px;
+
+    border: 1px solid rgba(85,230,165,.2);
+
+    background: rgba(14,18,25,.94);
+
+    color: var(--text);
+
+    font-size: 12px;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.45);
+
+    animation: toastIn .25s ease;
+
+    z-index: 200;
+}
+
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .container {
+        padding-top: 22px;
+    }
+
+    .hero {
+        padding: 23px;
+    }
+
+    .hero h2 {
+        font-size: 30px;
+    }
+
+    .diet-card {
+        grid-template-columns: 62px 1fr auto;
+        gap: 10px;
+        padding: 14px;
+    }
+
+    .diet-time {
+        font-size: 13px;
+    }
+
+    .food-name {
+        font-size: 13px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                ◈
+            </div>
+
+            <div>
+                <h1>DIET</h1>
+                <p>DAILY NUTRITION</p>
+            </div>
+
+        </div>
+
+        <button
+            class="add-btn"
+            onclick="openModal()"
+            title="Add diet"
+        >
+            +
+        </button>
+
+    </div>
+
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+        <div class="eyebrow">
+            Today's Nutrition
+        </div>
+
+        <h2>
+            Eat with <span>intention.</span>
+        </h2>
+
+        <div
+            class="hero-date"
+            id="heroDate"
+        >
+        </div>
+
+    </div>
+
+
+    <!-- TODAY'S DIET -->
+
+    <section class="today-section">
+
+        <div class="section-title">
+
+            <div>
+                <h3>Today's Diet</h3>
+                <p>Your meals, arranged by time.</p>
+            </div>
+
+        </div>
+
+
+        <div
+            class="diet-list"
+            id="dietList"
+        >
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- ADD DIET MODAL -->
+
+<div
+    class="overlay"
+    id="modalOverlay"
+    onclick="closeOutside(event)"
+>
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <h3>Add Diet</h3>
+
+            <button
+                class="close"
+                onclick="closeModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- TIME -->
+
+        <div class="form-group">
+
+            <label for="dietTime">
+                Time
+            </label>
+
+            <input
+                id="dietTime"
+                class="input"
+                type="time"
+            >
+
+        </div>
+
+
+        <!-- FOOD -->
+
+        <div class="form-group">
+
+            <label for="foodName">
+                Food / Meal
+            </label>
+
+            <input
+                id="foodName"
+                class="input"
+                type="text"
+                placeholder="e.g. Oats + Banana"
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <!-- QUANTITY -->
+
+        <div class="form-group">
+
+            <label for="foodQuantity">
+                Quantity / Note
+            </label>
+
+            <input
+                id="foodQuantity"
+                class="input"
+                type="text"
+                placeholder="e.g. 80g oats + 1 banana"
+                autocomplete="off"
+            >
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                class="cancel-btn"
+                onclick="closeModal()"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="save-btn"
+                onclick="addDiet()"
+            >
+                Add Diet
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+const STORAGE_KEY = "cosmicDietData_v1";
+
+let dietData = {
+    date: getTodayKey(),
+    meals: []
+};
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        loadData();
+
+        ensureToday();
+
+        updateDate();
+
+        renderDiet();
+
+        document
+            .getElementById("foodName")
+            .addEventListener(
+                "keydown",
+                function(event) {
+
+                    if (event.key === "Enter") {
+                        addDiet();
+                    }
+
+                }
+            );
+
+    }
+);
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+function getTodayKey() {
+
+    const now = new Date();
+
+    const year =
+        now.getFullYear();
+
+    const month =
+        String(
+            now.getMonth() + 1
+        ).padStart(2, "0");
+
+    const day =
+        String(
+            now.getDate()
+        ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+
+function updateDate() {
+
+    const now = new Date();
+
+    const text =
+        now.toLocaleDateString(
+            "en-IN",
+            {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            }
+        );
+
+    document
+        .getElementById("heroDate")
+        .textContent = text;
+}
+
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+function loadData() {
+
+    const saved =
+        localStorage.getItem(
+            STORAGE_KEY
+        );
+
+    if (!saved) return;
+
+    try {
+
+        const parsed =
+            JSON.parse(saved);
+
+        if (
+            parsed &&
+            Array.isArray(parsed.meals)
+        ) {
+
+            dietData = parsed;
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Could not load diet data.",
+            error
+        );
+
+    }
+}
+
+
+function saveData() {
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(dietData)
+    );
+}
+
+
+/* =========================================================
+   NEW DAY
+========================================================= */
+
+function ensureToday() {
+
+    const today =
+        getTodayKey();
+
+    if (dietData.date !== today) {
+
+        dietData = {
+            date: today,
+            meals: []
+        };
+
+        saveData();
+
+    }
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function openModal() {
+
+    document
+        .getElementById("modalOverlay")
+        .classList.add("show");
+
+    document
+        .getElementById("dietTime")
+        .value = getCurrentTime();
+
+    setTimeout(
+        () => {
+            document
+                .getElementById("foodName")
+                .focus();
+        },
+        100
+    );
+}
+
+
+function closeModal() {
+
+    document
+        .getElementById("modalOverlay")
+        .classList.remove("show");
+
+}
+
+
+function closeOutside(event) {
+
+    if (
+        event.target.id ===
+        "modalOverlay"
+    ) {
+
+        closeModal();
+
+    }
+
+}
+
+
+/* =========================================================
+   CURRENT TIME
+========================================================= */
+
+function getCurrentTime() {
+
+    const now =
+        new Date();
+
+    const hours =
+        String(
+            now.getHours()
+        ).padStart(2, "0");
+
+    const minutes =
+        String(
+            now.getMinutes()
+        ).padStart(2, "0");
+
+    return `${hours}:${minutes}`;
+
+}
+
+
+/* =========================================================
+   ADD DIET
+========================================================= */
+
+function addDiet() {
+
+    const time =
+        document
+            .getElementById("dietTime")
+            .value;
+
+    const food =
+        document
+            .getElementById("foodName")
+            .value
+            .trim();
+
+    const quantity =
+        document
+            .getElementById("foodQuantity")
+            .value
+            .trim();
+
+
+    if (!time) {
+
+        showToast(
+            "Please select a time."
+        );
+
+        return;
+
+    }
+
+
+    if (!food) {
+
+        showToast(
+            "Please enter the food or meal."
+        );
+
+        document
+            .getElementById("foodName")
+            .focus();
+
+        return;
+
+    }
+
+
+    const meal = {
+
+        id:
+            crypto.randomUUID(),
+
+        time:
+            time,
+
+        food:
+            food,
+
+        quantity:
+            quantity,
+
+        createdAt:
+            new Date().toISOString()
+
+    };
+
+
+    dietData.meals.push(meal);
+
+
+    /* 
+       ASCENDING TIME ORDER
+       07:00
+       09:30
+       13:00
+       18:00
+       21:30
+    */
+
+    sortMeals();
+
+
+    saveData();
+
+    renderDiet();
+
+    closeModal();
+
+    clearForm();
+
+    showToast(
+        "Diet added successfully."
+    );
+
+}
+
+
+/* =========================================================
+   SORT
+========================================================= */
+
+function sortMeals() {
+
+    dietData.meals.sort(
+        (a, b) =>
+            a.time.localeCompare(b.time)
+    );
+
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+function deleteDiet(id) {
+
+    const meal =
+        dietData.meals.find(
+            item => item.id === id
+        );
+
+    if (!meal) return;
+
+
+    dietData.meals =
+        dietData.meals.filter(
+            item =>
+                item.id !== id
+        );
+
+
+    saveData();
+
+    renderDiet();
+
+    showToast(
+        "Diet entry removed."
+    );
+
+}
+
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function renderDiet() {
+
+    const list =
+        document
+            .getElementById("dietList");
+
+
+    list.innerHTML = "";
+
+
+    if (
+        dietData.meals.length === 0
+    ) {
+
+        list.innerHTML = `
+
+            <div class="empty">
+
+                <div class="empty-icon">
+                    ◈
+                </div>
+
+                <strong>
+                    No diet added yet
+                </strong>
+
+                <p>
+                    Press + to add today's first meal.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    sortMeals();
+
+
+    dietData.meals.forEach(
+        meal => {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+            card.className =
+                "diet-card";
+
+
+            const formattedTime =
+                formatTime(meal.time);
+
+
+            const period =
+                getPeriod(meal.time);
+
+
+            card.innerHTML = `
+
+                <div>
+
+                    <div class="diet-time">
+                        ${formattedTime}
+                    </div>
+
+                    <div class="diet-time-period">
+                        ${period}
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    <div class="food-name">
+                        ${escapeHTML(meal.food)}
+                    </div>
+
+                    ${
+                        meal.quantity
+                        ?
+                        `
+                        <div class="food-quantity">
+                            ${escapeHTML(meal.quantity)}
+                        </div>
+                        `
+                        :
+                        ""
+                    }
+
+                </div>
+
+
+                <button
+                    class="delete-btn"
+                    onclick="deleteDiet('${meal.id}')"
+                    title="Remove diet"
+                >
+                    ×
+                </button>
+
+            `;
+
+
+            list.appendChild(card);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   TIME FORMAT
+========================================================= */
+
+function formatTime(time) {
+
+    const [hour, minute] =
+        time.split(":");
+
+    const date =
+        new Date();
+
+    date.setHours(
+        Number(hour),
+        Number(minute),
+        0,
+        0
+    );
+
+
+    return date.toLocaleTimeString(
+        "en-IN",
+        {
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true
+        }
+    );
+
+}
+
+
+function getPeriod(time) {
+
+    const hour =
+        Number(
+            time.split(":")[0]
+        );
+
+
+    if (hour < 5) {
+        return "Late Night";
+    }
+
+    if (hour < 12) {
+        return "Morning";
+    }
+
+    if (hour < 17) {
+        return "Afternoon";
+    }
+
+    if (hour < 21) {
+        return "Evening";
+    }
+
+    return "Night";
+
+}
+
+
+/* =========================================================
+   CLEAR FORM
+========================================================= */
+
+function clearForm() {
+
+    document
+        .getElementById("foodName")
+        .value = "";
+
+    document
+        .getElementById("foodQuantity")
+        .value = "";
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message) {
+
+    const toast =
+        document.createElement(
+            "div"
+        );
+
+    toast.className =
+        "toast";
+
+    toast.textContent =
+        message;
+
+
+    document
+        .body
+        .appendChild(toast);
+
+
+    setTimeout(
+        () => {
+
+            toast.style.opacity =
+                "0";
+
+            toast.style.transform =
+                "translateY(8px)";
+
+            setTimeout(
+                () => toast.remove(),
+                250
+            );
+
+        },
+        2200
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Escape"
+        ) {
+
+            closeModal();
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>

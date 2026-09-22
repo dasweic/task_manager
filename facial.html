@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Facial — Daily Record</title>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+    :root {
+        --bg: #05060a;
+        --card: rgba(17, 19, 29, 0.78);
+        --border: rgba(255,255,255,0.09);
+        --text: #f5f5f7;
+        --muted: #9296a8;
+        --purple: #9b7cff;
+        --cyan: #62dfff;
+        --green: #55e6a5;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        min-height: 100vh;
+        color: var(--text);
+        font-family: Inter, sans-serif;
+
+        background:
+            radial-gradient(
+                circle at 20% 10%,
+                rgba(130, 91, 255, 0.14),
+                transparent 32%
+            ),
+            radial-gradient(
+                circle at 85% 80%,
+                rgba(61, 205, 255, 0.08),
+                transparent 30%
+            ),
+            #05060a;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+    }
+
+    /* Cosmic stars */
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        opacity: .35;
+
+        background-image:
+            radial-gradient(1px 1px at 10% 20%, white, transparent),
+            radial-gradient(1px 1px at 25% 75%, white, transparent),
+            radial-gradient(1px 1px at 40% 30%, white, transparent),
+            radial-gradient(1px 1px at 65% 18%, white, transparent),
+            radial-gradient(1px 1px at 80% 65%, white, transparent),
+            radial-gradient(1px 1px at 92% 30%, white, transparent),
+            radial-gradient(1px 1px at 55% 88%, white, transparent);
+
+        background-size: 300px 300px;
+    }
+
+    .container {
+        width: min(500px, calc(100% - 30px));
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Header */
+
+    .header {
+        text-align: center;
+        margin-bottom: 28px;
+    }
+
+    .eyebrow {
+        color: var(--purple);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .header h1 {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 34px;
+        letter-spacing: -1.3px;
+        font-weight: 600;
+
+        background:
+            linear-gradient(
+                90deg,
+                #ffffff,
+                #b9a5ff,
+                #70e2ff
+            );
+
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .header p {
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 7px;
+    }
+
+    /* Main Card */
+
+    .card {
+        border: 1px solid var(--border);
+        border-radius: 28px;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(23, 25, 39, .88),
+                rgba(9, 11, 18, .82)
+            );
+
+        backdrop-filter: blur(22px);
+        -webkit-backdrop-filter: blur(22px);
+
+        padding: 30px;
+
+        box-shadow:
+            0 30px 100px rgba(0,0,0,.55),
+            inset 0 1px 0 rgba(255,255,255,.025);
+
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card::before {
+        content: "";
+
+        position: absolute;
+
+        width: 220px;
+        height: 220px;
+
+        right: -100px;
+        top: -110px;
+
+        border-radius: 50%;
+
+        background:
+            radial-gradient(
+                circle,
+                rgba(155,124,255,.22),
+                transparent 68%
+            );
+
+        pointer-events: none;
+    }
+
+    /* Icon */
+
+    .face-icon {
+        width: 66px;
+        height: 66px;
+
+        border-radius: 20px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        margin-bottom: 22px;
+
+        font-size: 29px;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(155,124,255,.17),
+                rgba(98,223,255,.06)
+            );
+
+        border: 1px solid rgba(155,124,255,.2);
+
+        box-shadow:
+            0 0 35px rgba(155,124,255,.12);
+    }
+
+    .exercise-title {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 24px;
+        font-weight: 600;
+    }
+
+    .exercise-subtitle {
+        color: var(--muted);
+        font-size: 12px;
+        margin-top: 6px;
+    }
+
+    /* Time */
+
+    .time-section {
+        margin-top: 30px;
+        padding: 18px;
+
+        border-radius: 17px;
+
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.06);
+    }
+
+    .time-label {
+        color: var(--muted);
+        font-size: 10px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+
+    .last-time {
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 17px;
+        font-weight: 600;
+    }
+
+    /* Gap */
+
+    .gap-section {
+        margin-top: 14px;
+        text-align: center;
+
+        padding: 25px 15px;
+
+        border-radius: 19px;
+
+        background:
+            radial-gradient(
+                circle at center,
+                rgba(155,124,255,.08),
+                transparent 70%
+            );
+    }
+
+    .gap-label {
+        color: var(--muted);
+        font-size: 10px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .gap {
+        margin-top: 8px;
+
+        font-family: "Space Grotesk", sans-serif;
+
+        font-size: 32px;
+        font-weight: 600;
+
+        background:
+            linear-gradient(
+                90deg,
+                var(--purple),
+                var(--cyan)
+            );
+
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    /* Button */
+
+    .exercise-btn {
+        width: 100%;
+
+        margin-top: 20px;
+
+        padding: 15px;
+
+        border: 0;
+        border-radius: 14px;
+
+        color: white;
+
+        font-family: Inter, sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+
+        cursor: pointer;
+
+        background:
+            linear-gradient(
+                135deg,
+                #7657ff,
+                #a07cff
+            );
+
+        box-shadow:
+            0 10px 30px rgba(118,87,255,.22);
+
+        transition:
+            transform .2s,
+            box-shadow .2s,
+            opacity .2s;
+    }
+
+    .exercise-btn:hover {
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 14px 38px rgba(118,87,255,.35);
+    }
+
+    .exercise-btn:active {
+        transform: translateY(0) scale(.99);
+    }
+
+    .exercise-btn.done {
+        background:
+            linear-gradient(
+                135deg,
+                #36b87f,
+                #55e6a5
+            );
+
+        color: #06140e;
+
+        box-shadow:
+            0 10px 30px rgba(85,230,165,.18);
+    }
+
+    /* Bottom */
+
+    .today-status {
+        text-align: center;
+        margin-top: 18px;
+
+        color: var(--muted);
+        font-size: 10px;
+    }
+
+    .status-dot {
+        width: 6px;
+        height: 6px;
+
+        display: inline-block;
+
+        border-radius: 50%;
+
+        background: var(--green);
+
+        box-shadow:
+            0 0 10px rgba(85,230,165,.7);
+
+        margin-right: 6px;
+    }
+
+    /* Mobile */
+
+    @media (max-width: 500px) {
+
+        .card {
+            padding: 24px;
+            border-radius: 23px;
+        }
+
+        .header h1 {
+            font-size: 30px;
+        }
+
+        .gap {
+            font-size: 28px;
+        }
+    }
+
+</style>
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <div class="eyebrow">
+            Daily Ritual
+        </div>
+
+        <h1>Facial Exercise</h1>
+
+        <p>
+            Keep the routine consistent.
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="face-icon">
+            ✦
+        </div>
+
+
+        <div class="exercise-title">
+            Facial Exercise
+        </div>
+
+        <div class="exercise-subtitle">
+            Your daily facial workout record
+        </div>
+
+
+        <!-- LAST PERFORMED -->
+
+        <div class="time-section">
+
+            <div class="time-label">
+                Last performed
+            </div>
+
+            <div
+                class="last-time"
+                id="lastTime"
+            >
+                Never
+            </div>
+
+        </div>
+
+
+        <!-- GAP -->
+
+        <div class="gap-section">
+
+            <div class="gap-label">
+                Time since last exercise
+            </div>
+
+            <div
+                class="gap"
+                id="gap"
+            >
+                —
+            </div>
+
+        </div>
+
+
+        <!-- ACTION -->
+
+        <button
+            class="exercise-btn"
+            id="exerciseBtn"
+            onclick="doExercise()"
+        >
+            Do Facial Exercise
+        </button>
+
+
+        <div class="today-status">
+
+            <span class="status-dot"></span>
+
+            <span id="statusText">
+                Ready for today's session
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const STORAGE_KEY = "facialExerciseRecord_v1";
+
+let lastPerformed = null;
+
+
+/* =========================
+   LOAD
+========================= */
+
+function loadRecord() {
+
+    const saved =
+        localStorage.getItem(STORAGE_KEY);
+
+    if (!saved) {
+        updateUI();
+        return;
+    }
+
+    try {
+
+        lastPerformed =
+            JSON.parse(saved);
+
+    } catch {
+
+        lastPerformed = null;
+
+    }
+
+    updateUI();
+}
+
+
+/* =========================
+   SAVE
+========================= */
+
+function saveRecord() {
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(lastPerformed)
+    );
+}
+
+
+/* =========================
+   DO EXERCISE
+========================= */
+
+function doExercise() {
+
+    lastPerformed =
+        new Date().toISOString();
+
+    saveRecord();
+
+    updateUI();
+
+    const button =
+        document.getElementById("exerciseBtn");
+
+    const status =
+        document.getElementById("statusText");
+
+    button.classList.add("done");
+
+    button.textContent =
+        "✓ Done for now";
+
+    status.textContent =
+        "Facial exercise completed";
+
+    setTimeout(() => {
+
+        button.classList.remove("done");
+
+        button.textContent =
+            "Do Facial Exercise";
+
+    }, 1800);
+
+}
+
+
+/* =========================
+   UPDATE UI
+========================= */
+
+function updateUI() {
+
+    const lastTime =
+        document.getElementById("lastTime");
+
+    const gap =
+        document.getElementById("gap");
+
+
+    if (!lastPerformed) {
+
+        lastTime.textContent =
+            "Never";
+
+        gap.textContent =
+            "First session";
+
+        return;
+    }
+
+
+    const date =
+        new Date(lastPerformed);
+
+
+    lastTime.textContent =
+        formatDateTime(date);
+
+
+    updateGap();
+
+}
+
+
+/* =========================
+   DATE FORMAT
+========================= */
+
+function formatDateTime(date) {
+
+    return date.toLocaleString(
+        "en-IN",
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true
+        }
+    );
+
+}
+
+
+/* =========================
+   LIVE GAP
+========================= */
+
+function updateGap() {
+
+    const gap =
+        document.getElementById("gap");
+
+
+    if (!lastPerformed) {
+
+        gap.textContent =
+            "First session";
+
+        return;
+    }
+
+
+    const previous =
+        new Date(lastPerformed);
+
+    const now =
+        new Date();
+
+
+    let difference =
+        now - previous;
+
+
+    if (difference < 0) {
+        difference = 0;
+    }
+
+
+    const totalSeconds =
+        Math.floor(difference / 1000);
+
+
+    const days =
+        Math.floor(
+            totalSeconds / 86400
+        );
+
+
+    const hours =
+        Math.floor(
+            (totalSeconds % 86400) / 3600
+        );
+
+
+    const minutes =
+        Math.floor(
+            (totalSeconds % 3600) / 60
+        );
+
+
+    const seconds =
+        totalSeconds % 60;
+
+
+    if (days > 0) {
+
+        gap.textContent =
+            `${days}d ${hours}h ${minutes}m`;
+
+    }
+
+    else if (hours > 0) {
+
+        gap.textContent =
+            `${hours}h ${minutes}m`;
+
+    }
+
+    else if (minutes > 0) {
+
+        gap.textContent =
+            `${minutes}m ${seconds}s`;
+
+    }
+
+    else {
+
+        gap.textContent =
+            `${seconds}s`;
+
+    }
+
+}
+
+
+/* =========================
+   LIVE TIMER
+========================= */
+
+setInterval(
+    updateGap,
+    1000
+);
+
+
+/* =========================
+   START
+========================= */
+
+loadRecord();
+
+</script>
+
+</body>
+</html>
